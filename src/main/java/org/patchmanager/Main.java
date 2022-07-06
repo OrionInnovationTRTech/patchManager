@@ -1,5 +1,6 @@
 package org.patchmanager;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -137,9 +138,11 @@ public class Main {
     }
     public static void main(String[] args) {
         try{
+            //Dotenv loads the environment variables that keep api key and email
+            Dotenv dotenv = Dotenv.load();
             String labelInput = "KL_4.8.1_P_4";
-            String email = "atokgoz@avctechnologies.com";
-            String api = "p43jlmcpVeQwknl0klEUA995";
+            String email = dotenv.get("EMAIL");
+            String api = dotenv.get("API_KEY");
             String fileName = fileNameDecider(labelInput);
             HttpRequest request = HttpRequest.newBuilder()
                     //put %20 instead of spaces to resolve illegal character
