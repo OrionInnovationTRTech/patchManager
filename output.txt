@@ -1,0 +1,65 @@
+PRODUCT_LINE: KANDYLINK
+============================================
+
+CATEGORY: GEN
+PREREQUISITES: 
+END
+PATCH ID: KANDYLINK_9.8.1.dl35_P_4
+LOADS: KANDYLINK_9.8.1
+END
+STATUS: V
+WEB_POST: Y
+STATUS DATE: 20220706
+TITLE: Patch 4
+DETAILED_DESCRIPTION:
+This patch includes all fix that were previously released in earlier patches and therefore only the latest patches needs to be applied. 
+For a complete list of fixes in this patch please refer to the individual patch admin files from the previously released patches.
+Please check to KANDYLINK 4.8.1 Patch 4 Release Notes for details.
+
+Includes fixes for following issues:
+ABE-25947
+KL 4.8.1 P4 - 220314-564991 - E2:DB in Failed state in CCB Cavendish Cluster (admin2 host2)
+
+ABE-25974
+JPMC - Vulnerability in Kandy Link while doing Pen Test (XML External Entity Injection)
+
+ABE-26046
+CLONE - Kandy Link 4.8.1 Patch 4 - MySQL Logs could not Rotate Properly
+
+ABE-26056
+Kandy Link SV 4.8.1 Patch 4 - After patch removed, Version information does not appear correctly on Admin GUI 
+
+ABE-26060
+Kandy Link SV 4.8.1 Patch 4 - During video call, video seems black screen on cisco 9971 hard phone
+
+ABE-26074
+Kandy Link 4.8.1 - Fault and Performance Management Doc Should be Updated For Adding Troubleshooting Steps When the 18581 Port is not Listening 
+
+ABE-26087
+Kandy Link 4.8.1 - REST API Spec Doc Should be Updated 
+
+ABE-26097
+Kandy Link does not add sip.instance to the Contact Header on REGISTER
+
+ABE-26123
+CLONE - Kandy Link 4.8.1 - Child Processes of Trace Logging does not Kill When Admin Tier is Stopped
+
+ABE-26140
+CLONE - Kandy Link 4.8.1 - RBBN:JPMC - Account trace does NOT show the timestamp for each message in seconds
+
+ABE-26191
+CLONE - Kandy Link 4.8.1 Patch 4 - KL Changes msid Value After MoH Operation
+
+ABE-26192
+Kandy Link is not rotating /var/log/mysql/error.log
+
+ABE-26204
+Kandy Link 4.8.1 - Gone Notification for DELETE Subscription 
+
+ABE-26220
+JPMC - Vulnerability in Kandy Link while doing Pen Test (XML External Entity Injection) Documentation Update 
+
+
+END DETAILED_DESCRIPTION
+MD5SUM (SPiDR_9.8.1.dl35_P_4.tar.gz) : afa55f78898ca4d3171e5df2e44f08c5
+
