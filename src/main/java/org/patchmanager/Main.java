@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.naming.NamingException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -109,7 +110,7 @@ public class Main {
         return outro;
     }
     private static final Option LABEL = new Option("l", "label", true, "Specify the label e.g. KL_4.8.1_P_4");
-    private static final Option VERSION = new Option("v", "version", true, "Specify the version in the format of number . number . number . twoChars number e.g. 9.8.1.dl35" );
+    private static final Option VERSION = new Option("v", "version", true, "Specify the version in the format of number.number.number.charcharnumber e.g. 9.8.1.dl35" );
     private static final Option PATCH = new Option("p", "patch", true, "Specify the patch as a number e.g. 14");
     private static void printHelpCmd(Options options){
         HelpFormatter formatter = new HelpFormatter();
@@ -130,22 +131,22 @@ public class Main {
 
             CommandLineParser commandLineParser = new DefaultParser();
             Options options = new Options();
-            LABEL.setRequired(true);
-            VERSION.setRequired(true);
-            PATCH.setRequired(true);
             options.addOption(LABEL);
             options.addOption(VERSION);
             options.addOption(PATCH);
 
             try {
                 CommandLine commandLine = commandLineParser.parse(options, args);
-                if (commandLine.hasOption(LABEL.getOpt())) {
-                    labelInput = commandLine.getOptionValue(LABEL);
-                } else {
-                    System.out.println("No label given");
-                    printHelpCmd(options);
-                    System.exit(-1);
+
+
+                try {
+                    missingOptionChecker(options, commandLine);
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("There is a missing option");
                 }
+
+
+                labelInput = commandLine.getOptionValue(LABEL);
 
                 //Regex is in the form of number . number . number . twoChars number
                 Pattern patternVersion = Pattern.compile("\\d+.\\d+.\\d+.[a-zA-Z]{2}\\d+");
@@ -161,7 +162,7 @@ public class Main {
                 //Regex is in the form of number
                 Pattern patternPatch = Pattern.compile("\\d+");
                 Matcher matcherPatch = patternPatch.matcher(commandLine.getOptionValue(PATCH));
-                if (commandLine.hasOption(PATCH.getOpt()) && matcherPatch.matches()) {
+                if (matcherPatch.matches()) {
                     patchInput = commandLine.getOptionValue(PATCH);
                 } else {
                     System.out.println("Patch does not fit the criteria");
@@ -191,15 +192,15 @@ public class Main {
             }
 
             //There are 2 versions that are used, a higher one like 9.8.1 and a lower one like 4.8.1
-            //Split by nonnumbers
-            String[] splittedVersionByNumbers = versionInput.split("(\\D+)");
-            String versionHigher = String.join(".", splittedVersionByNumbers[0], splittedVersionByNumbers[1], splittedVersionByNumbers[2]);
-            String lowerFirstNoByFive = String.valueOf(Integer.parseInt(splittedVersionByNumbers[0]) - 5);
-            String versionLower = String.join(".", lowerFirstNoByFive, splittedVersionByNumbers[1], splittedVersionByNumbers[2]);
+            //Split by numbers
+            String[] splitVersionByNumbers = versionInput.split("(\\D+)");
+            String versionHigher = String.join(".", splitVersionByNumbers[0], splitVersionByNumbers[1], splitVersionByNumbers[2]);
+            String lowerFirstNoByFive = String.valueOf(Integer.parseInt(splitVersionByNumbers[0]) - 5);
+            String versionLower = String.join(".", lowerFirstNoByFive, splitVersionByNumbers[1], splitVersionByNumbers[2]);
 
             Date date = new Date();
-            SimpleDateFormat SimpDateFormatObj = new SimpleDateFormat("yyyyMMdd");
-            String strDate= SimpDateFormatObj.format(date);
+            SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat("yyyyMMdd");
+            String strDate= simpleDateFormatObj.format(date);
 
             String fileName = fileNameDecider(patchInput, versionInput);
 
@@ -236,6 +237,17 @@ public class Main {
         } catch (URISyntaxException | InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void missingOptionChecker(Options options, CommandLine commandLine){
+
+
+            if (!commandLine.hasOption(PATCH.getOpt()) || !commandLine.hasOption(VERSION.getOpt()) || !commandLine.hasOption(LABEL.getOpt())) {
+                System.out.println("There is a missing option");
+                printHelpCmd(options);
+                throw new IllegalArgumentException("There is a missing option");
+            }
+
     }
 
     /**
