@@ -9,7 +9,7 @@ LOADS: KANDYLINK_9.8.1
 END
 STATUS: V
 WEB_POST: Y
-STATUS DATE: 20220725
+STATUS DATE: 20220726
 TITLE: Patch 3
 DETAILED_DESCRIPTION:
 This patch includes all fix that were previously released in earlier patches and therefore only the latest patches needs to be applied. 

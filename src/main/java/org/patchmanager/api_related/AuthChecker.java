@@ -1,5 +1,9 @@
 package org.patchmanager.api_related;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.patchmanager.Main;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,6 +16,8 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.patchmanager.api_related.EncodeBase64.encodeBase64;
 
 public class AuthChecker {
+
+    static final Logger LOGGER  = LogManager.getLogger(AuthChecker.class);
     /**
      * Checks authorization
      * @param email email in .env
@@ -23,6 +29,7 @@ public class AuthChecker {
      */
     public static boolean checkAuth(String email, String api){
         try {
+            LOGGER.debug("Sending a Http request for authorization");
             HttpRequest requestAuth = HttpRequest.newBuilder()
                     .uri(new URI("https://kandyio.atlassian.net/rest/auth/1/session"))
                     //value is base64 encoding of "email:API_KEY"
@@ -31,18 +38,19 @@ public class AuthChecker {
                     .GET()
                     .build();
 
+            LOGGER.debug("Getting a Http response for authorization");
             HttpResponse<String> responseAuth = HttpClient.newBuilder()
                     .build()
                     .send(requestAuth, HttpResponse.BodyHandlers.ofString());
             return (responseAuth.statusCode() == 200);
         } catch (URISyntaxException e) {
-            System.out.println("Problem with URI while checking for authorization");
+            LOGGER.fatal("Problem with URI while checking for authorization");
             System.exit(-1);
         } catch (IOException e) {
-            System.out.println("IOException while checking for authorization");
+            LOGGER.fatal("IOException while checking for authorization");
             System.exit(-1);
         } catch (InterruptedException e) {
-            System.out.println("InterruptedException while checking for authorization");
+            LOGGER.fatal("InterruptedException while checking for authorization");
             System.exit(-1);
         }
         return false;

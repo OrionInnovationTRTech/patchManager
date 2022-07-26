@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" name="MyApp" packages="">
+<Configuration status="WARN" name="LOGGER" packages="">
     <Appenders>
-        <File name="MyFile"
-              fileName="logs/myapp-${date:yyyy-MM-ddHHmmssSSS}.log">
+        <File name="patchManager"
+              fileName="logs/patchManager-${date:yyyy-MM-ddHHmmssSSS}.log">
             <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+                <Pattern>%d [%t] %-5level %logger{1} - %msg%n
                 </Pattern>
             </PatternLayout>
         </File>
@@ -14,8 +14,8 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="trace">
-            <AppenderRef ref="MyFile"/>
+        <Root level="DEBUG">
+            <AppenderRef ref="patchManager"/>
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

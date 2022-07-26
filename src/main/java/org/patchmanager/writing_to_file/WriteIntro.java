@@ -1,8 +1,12 @@
 package org.patchmanager.writing_to_file;
 
-public class WriteIntro {
-    public static String writeIntro(String patch, String versionLower, String versionHigher, String versionInput, String strDate) {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public class WriteIntro {
+    static Logger LOGGER = LogManager.getLogger(WriteIntro.class);
+    public static String writeIntro(String patch, String versionLower, String versionHigher, String versionInput, String strDate) {
+        LOGGER.debug("Creating the string for the intro(until issues) part");
         StringBuilder intro = new StringBuilder();
         intro.append("PRODUCT_LINE: KANDYLINK\n");
         intro.append("============================================\n\n");
