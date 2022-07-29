@@ -25,9 +25,16 @@ import static org.patchmanager.writing_to_file.WriteToFile.writeToFile;
 
 
 public class Main {
-    static final Logger LOGGER  = LogManager.getLogger(Main.class);
+
 
     public static void main(String[] args) {
+        Logger LOGGER = null;
+        try {
+            LOGGER = LogManager.getLogger(Main.class);
+        } catch (Exception e) {
+            System.out.println("log4j2.xml cannot be found");
+            System.exit(-1);
+        }
         LOGGER.debug("Started the main function");
         String labelInput = "";
         String versionInput = "";
@@ -107,11 +114,11 @@ public class Main {
 
         LOGGER.info("Trying to send a Http Request to the API and get a response");
         HttpRequestAndResponse httpRequestAndResponse = new HttpRequestAndResponse(labelInput);
-
-        if (!parseJiraIssues(httpRequestAndResponse.response.body()).isEmpty()) {
+        String parsedJiraIssues = parseJiraIssues(httpRequestAndResponse.response.body(), versionLower, patchInput);
+        if (!parsedJiraIssues.isEmpty()) {
             StringBuilder finalStr = new StringBuilder();
             finalStr.append(writeIntro(patchInput, versionLower, versionHigher, versionInput, strDate))
-                    .append(parseJiraIssues(httpRequestAndResponse.response.body()))
+                    .append(parsedJiraIssues)
                     .append(writeOutro(patchInput, versionHigher));
             writeToFile(finalStr.toString(), fileName);
         } else {
