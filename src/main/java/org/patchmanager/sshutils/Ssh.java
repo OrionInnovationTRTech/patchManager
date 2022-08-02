@@ -4,10 +4,11 @@ import com.jcraft.jsch.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.io.WriteOutro;
 
-import java.io.*;
-import java.util.Vector;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Ssh {
   static Logger LOGGER = LogManager.getLogger(Ssh.class);

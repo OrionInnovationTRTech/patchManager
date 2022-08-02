@@ -9,7 +9,7 @@ import org.patchmanager.apiutils.DotEnvUser;
 import java.util.Vector;
 
 public class UploadFile {
-  static Logger LOGGER = LogManager.getLogger(PrintPwdAndLs.class);
+  static Logger LOGGER = LogManager.getLogger(UploadFile.class);
   DotEnvUser dotEnvUserObj = new DotEnvUser();
 
   /**

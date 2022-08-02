@@ -8,7 +8,7 @@ import org.patchmanager.apiutils.DotEnvUser;
 import java.util.Vector;
 
 public class DownloadFile {
-  static Logger LOGGER = LogManager.getLogger(PrintPwdAndLs.class);
+  static Logger LOGGER = LogManager.getLogger(DownloadFile.class);
   DotEnvUser dotEnvUserObj = new DotEnvUser();
 
   /**
