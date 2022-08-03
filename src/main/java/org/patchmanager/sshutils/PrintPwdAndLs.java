@@ -21,7 +21,7 @@ public class PrintPwdAndLs {
     ChannelSftp sftp = null;
     try {
       session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
-      session.setPassword(DotEnvUser.sshpassword);
+      session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
 

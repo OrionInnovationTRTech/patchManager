@@ -1,26 +1,30 @@
 package org.patchmanager.sshutils;
 
+
 import com.jcraft.jsch.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
-
-public class MvnInstall {
-  static Logger LOGGER = LogManager.getLogger(MvnInstall.class);
+public class CheckFileExists {
+  static Logger LOGGER = LogManager.getLogger(CheckFileExists.class);
   static DotEnvUser dotEnvUserObj = new DotEnvUser();
 
   /**
-   * Connects to ssh server and sends sudo apt install maven, reads the response string
+   * Connects to ssh server and prints pwd and ls
    *
    */
-  public static void  sshMvnInstall()  {
+  public static boolean checkFileExists()  {
     Session session = null;
-    ChannelExec channel = null;
+    Channel channel = null;
     try {
       session = new JSch().getSession("senas", "10.254.51.215", 22);
       session.setPassword(DotEnvUser.zitsvypassword);
@@ -34,16 +38,15 @@ public class MvnInstall {
       List<String> result = new ArrayList<String>();
 
 
-      channel.setCommand("cdwae; cd base/modules/webapps/wae-admin-rest-war/;git checkout spidr_4.8.1_patch && git pull; mvn -s ../settings.xlm clean && mvn -s ../settings.xml install");
+      ((ChannelExec) channel).setCommand("cd /export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target; ls");
 
       // if true ==>  force the pseudo terminal allocation for the "exec" channel
-      ((ChannelExec) channel).setPty(true);
-      channel.setErrStream(System.err);
+      ((ChannelExec) channel).setPty(false);
+      ((ChannelExec) channel).setErrStream(System.err);
       channel.connect();
 
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
       String line;
-
       while ((line = reader.readLine()) != null)
       {
         System.out.println(line);
@@ -51,6 +54,23 @@ public class MvnInstall {
       }
       int exitStatus = channel.getExitStatus();
       System.out.println("Exit status code: "+exitStatus);
+      for(int i = 0; i < result.size(); i++) {
+
+        if(result.get(i).equals("wae-admin-rest-war-9.8.1.war")) {
+          System.out.println("File is present");
+          channel.disconnect();
+          session.disconnect();
+          return true;
+        }
+
+        if(i == result.size()-1) {
+          System.out.println("File is not present");
+          channel.disconnect();
+          session.disconnect();
+          return false;
+        }
+      }
+
     } catch (JSchException jse){
       LOGGER.fatal(jse.getMessage());
     } catch (IOException ioe){
@@ -64,6 +84,10 @@ public class MvnInstall {
         session.disconnect();
       }
 
+
     }
+    return false;
   }
 }
+
+

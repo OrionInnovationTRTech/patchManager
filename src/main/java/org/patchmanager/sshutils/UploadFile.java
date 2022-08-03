@@ -6,8 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
 
-import java.util.Vector;
-
 public class UploadFile {
   static Logger LOGGER = LogManager.getLogger(UploadFile.class);
   DotEnvUser dotEnvUserObj = new DotEnvUser();
@@ -22,7 +20,7 @@ public class UploadFile {
     ChannelSftp sftp = null;
     try {
       session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
-      session.setPassword(DotEnvUser.sshpassword);
+      session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
 

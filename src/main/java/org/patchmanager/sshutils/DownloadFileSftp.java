@@ -5,30 +5,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
 
-import java.util.Vector;
-
-public class DownloadFile {
-  static Logger LOGGER = LogManager.getLogger(DownloadFile.class);
+public class DownloadFileSftp {
+  static Logger LOGGER = LogManager.getLogger(DownloadFileSftp.class);
   DotEnvUser dotEnvUserObj = new DotEnvUser();
 
   /**
    * Connects to ssh server and prints pwd and ls
    *
    */
-  public DownloadFile()  {
+  public DownloadFileSftp()  {
     Session session = null;
     Channel channel = null;
     ChannelSftp sftp = null;
     try {
       session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
-      session.setPassword(DotEnvUser.sshpassword);
+      session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
 
-      channel = session.openChannel("sftp");
-      channel.connect();
+      sftp = (ChannelSftp) channel;
 
-      ((ChannelSftp)channel).get("/home/ntsysadm/dummy.txt", "C:\\Users\\bkarak\\Downloads\\dummy.txt");
+      sftp.put("/home/ntsysadm/dummy.txt", "/bkarak/Downloads");
 
     } catch (JSchException jse){
       LOGGER.fatal(jse.getMessage());

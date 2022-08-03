@@ -9,7 +9,8 @@ public class DotEnvUser {
   static Dotenv dotenv = null;
   public static String email = "";
   public static String api = "";
-  public static String sshpassword = "";
+  public static String labpassword = "";
+  public static String zitsvypassword = "";
   public DotEnvUser() {
 
     try {
@@ -23,6 +24,7 @@ public class DotEnvUser {
     LOGGER.debug("Getting email and API key");
     email = dotenv.get("EMAIL");
     api = dotenv.get("API_KEY");
-    sshpassword = dotenv.get("SSHPASSWORD");
+    labpassword = dotenv.get("LAB_PASSWORD");
+    zitsvypassword = dotenv.get("ZITSVY_PASSWORD");
   }
 }

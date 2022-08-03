@@ -2,8 +2,7 @@ package org.patchmanager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.sshutils.DownloadFile;
-import org.patchmanager.sshutils.PrintPwdAndLs;
+import org.patchmanager.sshutils.*;
 
 
 /**
@@ -25,7 +24,8 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.debug("Started the main function");
-    DownloadFile df = new DownloadFile();
+    //MvnInstall.sshMvnInstall();
+    TransferFromZitsvyToLab.transferFromZitsvyToLab();
     /**
     String labelInput = "";
     String versionInput = "";

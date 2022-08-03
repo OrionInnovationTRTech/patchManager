@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 
 public class Ssh {
   static Logger LOGGER = LogManager.getLogger(Ssh.class);
-  DotEnvUser dotEnvUserObj = new DotEnvUser();
+  static DotEnvUser dotEnvUserObj = new DotEnvUser();
 
   /**
    * Connects to ssh server and sends a command, reads the response string
@@ -24,7 +24,7 @@ public class Ssh {
 
     try {
       session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
-      session.setPassword(DotEnvUser.sshpassword);
+      session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
 
