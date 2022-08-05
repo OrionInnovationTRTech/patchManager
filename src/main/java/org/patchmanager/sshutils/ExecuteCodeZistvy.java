@@ -1,5 +1,6 @@
 package org.patchmanager.sshutils;
 
+import com.jcraft.jsch.ChannelExec;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.channel.ClientChannel;
 import org.apache.sshd.client.channel.ClientChannelEvent;
@@ -9,14 +10,12 @@ import org.patchmanager.apiutils.DotEnvUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
-public class ExecuteCodeMina {
+public class ExecuteCodeZistvy {
   DotEnvUser dotEnvUserObj = new DotEnvUser();
-  public ExecuteCodeMina(){
-    String command = "ls;pwd";
+  public ExecuteCodeZistvy(String command){
     SshClient client = SshClient.setUpDefaultClient();
     client.start();
 
@@ -42,8 +41,5 @@ public class ExecuteCodeMina {
     } finally {
       client.stop();
     }
-
-
-
   }
 }

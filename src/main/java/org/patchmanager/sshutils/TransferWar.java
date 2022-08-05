@@ -8,18 +8,17 @@ import org.apache.sshd.common.channel.Channel;
 import org.patchmanager.apiutils.DotEnvUser;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
-public class InteractiveCmdMina {
+public class TransferWar {
   DotEnvUser dotEnvUserObj = new DotEnvUser();
-  public String getFileList() throws Exception {
+  public TransferWar() throws Exception {
     String scpCommand = "scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war ntsysadm@47.168.150.36:/tmp/\n";
     SshClient client = SshClient.setUpDefaultClient();
     client.start();
-    try (ClientSession session = client.connect("ntsysadm", "47.168.150.33", 22)
+    try (ClientSession session = client.connect("ntsysadm", "47.168.150.36", 22)
         .verify(1, TimeUnit.SECONDS)
         .getSession()) {
       session.addPasswordIdentity(DotEnvUser.labpassword);
@@ -48,7 +47,7 @@ public class InteractiveCmdMina {
           if(!error.isEmpty()) {
             throw new Exception(error);
           }
-          return new String(responseStream.toByteArray());
+          System.out.println(new String(responseStream.toByteArray()));
         } finally {
           channel.close(false);
         }

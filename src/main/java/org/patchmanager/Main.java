@@ -2,7 +2,9 @@ package org.patchmanager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.sshutils.*;
+import org.patchmanager.sshutils.ExecuteCodeLab;
+import org.patchmanager.sshutils.ExecuteCodeZistvy;
+import org.patchmanager.sshutils.TransferWar;
 
 
 /**
@@ -24,12 +26,13 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.debug("Started the main function");
-    ExecuteCodeMina t = new ExecuteCodeMina();
-    //MinaTest mt = new MinaTest();
-    InteractiveCmdMina ic = new InteractiveCmdMina();
-    System.out.println(ic.getFileList());
-    //ScpMina sc = new ScpMina();
-   // DownloadFileSftp d = new DownloadFileSftp();
+    ExecuteCodeZistvy t = new ExecuteCodeZistvy("cdwae; cd base/modules/webapps/wae-admin-rest-war/;git checkout spidr_4.8.1_patch && git pull;mvn -o -s ../settings.xml clean");
+    ExecuteCodeLab l0 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
+    TransferWar ic = new TransferWar();
+    ExecuteCodeLab l1 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
+   /* System.out.println("Deleting");
+    ExecuteCodeLab l2 = new ExecuteCodeLab("cd /tmp;rm wae-admin-rest-war-9.8.1.war");
+    ExecuteCodeLab l3 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");*/
     /**
     String labelInput = "";
     String versionInput = "";
