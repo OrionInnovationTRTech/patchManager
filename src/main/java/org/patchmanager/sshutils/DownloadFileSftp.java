@@ -23,10 +23,16 @@ public class DownloadFileSftp {
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
 
-      sftp = (ChannelSftp) channel;
+      /*session = new JSch().getSession("senas", "10.254.51.215", 22);
+      session.setPassword(DotEnvUser.zitsvypassword);
+      session.setConfig("StrictHostKeyChecking", "no");
+      session.connect();*/
 
-      sftp.put("/home/ntsysadm/dummy.txt", "/bkarak/Downloads");
-
+      channel = session.openChannel("sftp");
+      channel.connect();
+      sftp= (ChannelSftp) channel;
+      //sftp.put("/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war", "ntsysadm@47.168.150.36:/tmp/");
+      sftp.get("senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war", "/tmp/");
     } catch (JSchException jse){
       LOGGER.fatal(jse.getMessage());
     } catch (SftpException sftpe){

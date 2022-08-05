@@ -23,10 +23,16 @@ public class Ssh {
     Channel channel = null;
 
     try {
-      session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
+      /*session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
       session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
+      session.connect();*/
+
+      session = new JSch().getSession("senas", "10.254.51.215", 22);
+      session.setPassword(DotEnvUser.zitsvypassword);
+      session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
+
 
       channel = (ChannelExec) session.openChannel("exec");
       InputStream is = channel.getInputStream();

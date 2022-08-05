@@ -15,7 +15,7 @@ public class Main {
    * @param args cli args, they are supposed to be
    *             --version --label --patch or their short versions
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     Logger LOGGER = null;
     try {
       LOGGER = LogManager.getLogger(Main.class);
@@ -24,8 +24,12 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.debug("Started the main function");
-    //MvnInstall.sshMvnInstall();
-    TransferFromZitsvyToLab.transferFromZitsvyToLab();
+    ExecuteCodeMina t = new ExecuteCodeMina();
+    //MinaTest mt = new MinaTest();
+    InteractiveCmdMina ic = new InteractiveCmdMina();
+    System.out.println(ic.getFileList());
+    //ScpMina sc = new ScpMina();
+   // DownloadFileSftp d = new DownloadFileSftp();
     /**
     String labelInput = "";
     String versionInput = "";

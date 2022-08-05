@@ -22,44 +22,57 @@ public class TransferFromZitsvyToLab {
     Session session = null;
     Session session2 = null;
     ChannelExec channel = null;
+    ChannelExec channel2 = null;
     try {
-      session2 = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
-      session2.setPassword(DotEnvUser.labpassword);
-      session2.setConfig("StrictHostKeyChecking", "no");
-      session2.connect();
-
-      session = new JSch().getSession("senas", "10.254.51.215", 22);
-      session.setPassword(DotEnvUser.zitsvypassword);
+      session = new JSch().getSession("ntsysadm", "47.168.150.33", 22);
+      session.setPassword(DotEnvUser.labpassword);
       session.setConfig("StrictHostKeyChecking", "no");
       session.connect();
+
+      session2 = new JSch().getSession("senas", "10.254.51.215", 22);
+      session2.setPassword(DotEnvUser.zitsvypassword);
+      session2.setConfig("StrictHostKeyChecking", "no");
+      session2.connect();
 
 
 
       channel = (ChannelExec) session.openChannel("exec");
-
+      channel2 = (ChannelExec) session2.openChannel("exec");
       //define input stream and list to read and store the output from shell
       InputStream in = channel.getInputStream();
-      List<String> result = new ArrayList<String>();
-      String command = "scp -3 senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war C:\\Users\\bkarak\\Downloads";
+      InputStream in2 = channel2.getInputStream();
+      OutputStream os = channel.getOutputStream();
+      OutputStream os2 = channel2.getOutputStream();
+      String command = "scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war ntsysadm@47.168.150.36:/tmp/";
       channel.setCommand(command);
-
       // if true ==>  force the pseudo terminal allocation for the "exec" channel
       channel.setPty(true);
       channel.setErrStream(System.err);
+      channel2.setPty(true);
+      channel2.setErrStream(System.err);
       channel.connect();
+      channel2.connect();
 
-      SshBase 
 
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
       String line;
-
-      while ((line = reader.readLine()) != null)
+      System.out.println(reader.readLine());
+      /*while ((line = reader.readLine()) != null)
       {
         System.out.println(line);
-        result.add(line);
+      }*/
+      BufferedReader reader2 = new BufferedReader(new InputStreamReader(in2));
+      String line2;
+
+      while ((line2 = reader2.readLine()) != null)
+      {
+        System.out.println(line2);
       }
+
       int exitStatus = channel.getExitStatus();
       System.out.println("Exit status code: "+exitStatus);
+      int exitStatus2 = channel2.getExitStatus();
+      System.out.println("Exit status code: "+exitStatus2);
     } catch (JSchException jse){
       LOGGER.fatal(jse.getMessage());
     } catch (IOException ioe){
