@@ -2,9 +2,19 @@ package org.patchmanager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.sshutils.ExecuteCodeLab;
-import org.patchmanager.sshutils.ExecuteCodeZistvy;
-import org.patchmanager.sshutils.TransferWar;
+import org.apache.sshd.client.SshClient;
+import org.apache.sshd.client.channel.ClientChannel;
+import org.apache.sshd.client.channel.ClientChannelEvent;
+import org.apache.sshd.client.session.ClientSession;
+import org.apache.sshd.common.channel.Channel;
+import org.patchmanager.apiutils.DotEnvUser;
+import org.patchmanager.sshutils.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.EnumSet;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -19,6 +29,7 @@ public class Main {
    */
   public static void main(String[] args) throws Exception {
     Logger LOGGER = null;
+    new DotEnvUser();
     try {
       LOGGER = LogManager.getLogger(Main.class);
     } catch (Exception e) {
@@ -26,10 +37,45 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.debug("Started the main function");
-    ExecuteCodeZistvy t = new ExecuteCodeZistvy("cdwae; cd base/modules/webapps/wae-admin-rest-war/;git checkout spidr_4.8.1_patch && git pull;mvn -o -s ../settings.xml clean");
-    ExecuteCodeLab l0 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
-    TransferWar ic = new TransferWar();
-    ExecuteCodeLab l1 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
+
+
+    ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
+    ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
+    //new PipedShell(labUsr);
+
+    Scanner scanner = new Scanner(System.in);
+    SshClient client = SshClient.setUpDefaultClient();
+    ClientSession session = new CreateSshSession().createSshSession(zitsvyUsr, client);
+    ClientChannel channel = session.createChannel(Channel.CHANNEL_SHELL);
+    channel.open().verify(3, TimeUnit.SECONDS);
+    new ServerWelcomeMessage().displayWelcomeMessage(channel);
+    new PassCmdToChannel().passCmdToChannel("cdwae\n", channel);
+    new PassCmdToChannel().passCmdToChannel("cd base/modules/webapps/wae-admin-rest-war/\n", channel);
+    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
+    new PassCmdToChannel().passCmdToChannel("git checkout spidr_4.8.1_patch\n", channel);
+    new PassCmdToChannel().passCmdToChannel("git pull\n", channel);
+    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
+    //new PassCmdToChannel().passCmdToChannel("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install\n", channel);
+    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
+
+
+    String cmd = "";
+    while (true) {
+      System.out.println("Write a linux or command or write !! to exit");
+      cmd = scanner.nextLine() + "\n";
+      if (cmd.equals("!!\n")) {
+        System.out.println("Terminating the program");
+        break;
+      }
+      new PassCmdToChannel().passCmdToChannel(cmd, channel);
+    }
+    channel.close();
+    session.close();
+    client.close();
+    /*new ExecuteCodeZistvy("cdwae; cd base/modules/webapps/wae-admin-rest-war/;git checkout spidr_4.8.1_patch && git pull;mvn -o -s ../settings.xml clean");
+    new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
+    new TransferWar();
+    new ExecuteCodeLab("cd /tmp;ls -lha;pwd");*/
    /* System.out.println("Deleting");
     ExecuteCodeLab l2 = new ExecuteCodeLab("cd /tmp;rm wae-admin-rest-war-9.8.1.war");
     ExecuteCodeLab l3 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");*/

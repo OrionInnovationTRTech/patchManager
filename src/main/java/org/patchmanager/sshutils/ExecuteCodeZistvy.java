@@ -1,6 +1,4 @@
 package org.patchmanager.sshutils;
-
-import com.jcraft.jsch.ChannelExec;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.channel.ClientChannel;
 import org.apache.sshd.client.channel.ClientChannelEvent;
