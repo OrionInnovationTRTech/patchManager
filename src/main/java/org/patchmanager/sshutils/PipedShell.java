@@ -39,15 +39,17 @@ public class PipedShell {
           System.out.println(new String(responseStream.toByteArray()));
           while (true) {
             System.out.println("Write a linux or command or write !! to exit");
-            cmd = scanner.nextLine() + "\n";
-            if (cmd.equals("!!\n")){
+            cmd = scanner.nextLine();
+            cmd = cmd + ";echo \"END_OF_COMMAND\"\n";
+            if (cmd.equals("!!;echo \"END_OF_COMMAND\"\n")){
               break;
             }
             pipedIn.write(cmd.getBytes());
             pipedIn.flush();
-            channel.waitFor(EnumSet.of(ClientChannelEvent.EOF), 125);
-            System.out.println(new String(responseStream.toByteArray()));
-            responseStream.reset();
+            System.out.println(getCmdOutput(responseStream));
+            //channel.waitFor(EnumSet.of(ClientChannelEvent.EOF), 125);
+            //System.out.println(new String(responseStream.toByteArray()));
+            //responseStream.reset();
           }
           System.out.println("Terminating the program");
           String error = new String(errorStream.toByteArray());
@@ -61,6 +63,12 @@ public class PipedShell {
     } finally {
       client.stop();
     }
+  }
+  public String getCmdOutput(ByteArrayOutputStream outputStream) {
+    while (outputStream.toString().indexOf("\nEND_OF_COMMAND") <= 0 && outputStream.toString().indexOf("'s password:") <= 0) {}
+    String output = outputStream.toString ();
+    outputStream.reset ();
+    return output;
   }
 }
 

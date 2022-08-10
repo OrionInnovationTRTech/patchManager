@@ -3,6 +3,7 @@ package org.patchmanager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.sshd.client.SshClient;
+import org.apache.sshd.client.channel.ChannelExec;
 import org.apache.sshd.client.channel.ClientChannel;
 import org.apache.sshd.client.channel.ClientChannelEvent;
 import org.apache.sshd.client.session.ClientSession;
@@ -38,32 +39,34 @@ public class Main {
     }
     LOGGER.debug("Started the main function");
 
-
+    Scanner scanner = new Scanner(System.in);
     ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
     ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
-    //new PipedShell(labUsr);
+    new PipedShell(labUsr);
 
-    Scanner scanner = new Scanner(System.in);
+    /*
     SshClient client = SshClient.setUpDefaultClient();
-    ClientSession session = new CreateSshSession().createSshSession(zitsvyUsr, client);
+    ClientSession session = new CreateSshSession().createSshSession(labUsr, client);
     ClientChannel channel = session.createChannel(Channel.CHANNEL_SHELL);
-    channel.open().verify(3, TimeUnit.SECONDS);
+    channel.open().verify(2000);
     new ServerWelcomeMessage().displayWelcomeMessage(channel);
-    new PassCmdToChannel().passCmdToChannel("cdwae\n", channel);
-    new PassCmdToChannel().passCmdToChannel("cd base/modules/webapps/wae-admin-rest-war/\n", channel);
-    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
-    new PassCmdToChannel().passCmdToChannel("git checkout spidr_4.8.1_patch\n", channel);
-    new PassCmdToChannel().passCmdToChannel("git pull\n", channel);
-    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
-    //new PassCmdToChannel().passCmdToChannel("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install\n", channel);
-    new PassCmdToChannel().passCmdToChannel("ls\n", channel);
-
-
+    *//*new PassCmdToChannel().passCmdToChannel("pwd", channel);
+    new PassCmdToChannel().passCmdToChannel("cdwae", channel);
+    new PassCmdToChannel().passCmdToChannel("cd base/modules/webapps/wae-admin-rest-war/", channel);
+    new PassCmdToChannel().passCmdToChannel("ls", channel);
+    new PassCmdToChannel().passCmdToChannel("git checkout spidr_4.8.1_patch", channel);
+    new PassCmdToChannel().passCmdToChannel("git pull", channel);
+    new PassCmdToChannel().passCmdToChannel("ls", channel);
+    new PassCmdToChannel().passCmdToChannel("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install", channel);
+    new PassCmdToChannel().passCmdToChannel("ls", channel);
+    new PassCmdToChannel().passCmdToChannel("scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war ntsysadm@47.168.150.36:/tmp/", channel);
+    new PassCmdToChannel().passPasswordToChannel(DotEnvUser.zitsvypassword, channel);
+    new PassCmdToChannel().passPasswordToChannel(DotEnvUser.labpassword, channel);*//*
     String cmd = "";
     while (true) {
-      System.out.println("Write a linux or command or write !! to exit");
-      cmd = scanner.nextLine() + "\n";
-      if (cmd.equals("!!\n")) {
+      System.out.println("Write a linux command or write !! to exit");
+      cmd = scanner.nextLine();
+      if (cmd.equals("!!")) {
         System.out.println("Terminating the program");
         break;
       }
@@ -71,15 +74,9 @@ public class Main {
     }
     channel.close();
     session.close();
-    client.close();
-    /*new ExecuteCodeZistvy("cdwae; cd base/modules/webapps/wae-admin-rest-war/;git checkout spidr_4.8.1_patch && git pull;mvn -o -s ../settings.xml clean");
-    new ExecuteCodeLab("cd /tmp;ls -lha;pwd");
-    new TransferWar();
-    new ExecuteCodeLab("cd /tmp;ls -lha;pwd");*/
-   /* System.out.println("Deleting");
-    ExecuteCodeLab l2 = new ExecuteCodeLab("cd /tmp;rm wae-admin-rest-war-9.8.1.war");
-    ExecuteCodeLab l3 = new ExecuteCodeLab("cd /tmp;ls -lha;pwd");*/
-    /**
+    client.close();*/
+
+    /*
     String labelInput = "";
     String versionInput = "";
     String patchInput = "";
@@ -170,19 +167,10 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.info("Finishing the main function");
-     **/
+     */
   }
-  //+gitignore
   //make parse string response shorter
   //check style
-  //+parse check first 15 chars only
   //check performance of long regex
-  //+try catch null option missing
-  //+mockito
-  //+api test
-  //+change name of classes to capital starting letter
-  //+display path and success
-  //+two chars
-  //+remove [] things and such
-  //+log4j
+
 }
