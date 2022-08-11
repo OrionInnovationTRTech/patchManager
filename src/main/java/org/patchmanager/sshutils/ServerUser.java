@@ -5,6 +5,14 @@ public class ServerUser {
   private String ip = "";
   private String password = "";
   private int port = 22;
+
+  /**
+   * An object to ease the process of connecting a server, default port is 22
+   * @param username
+   * @param ip
+   * @param password
+   * @param port
+   */
   public ServerUser(String username, String ip, String password, int port){
     this.setUsername(username);
     this.setIp(ip);
@@ -12,6 +20,13 @@ public class ServerUser {
     this.setPort(port);
   }
 
+  /**
+   * An object to ease the process of connecting a server, default port is 22,
+   * another constructor with port is also available
+   * @param username
+   * @param ip
+   * @param password
+   */
   public ServerUser(String username, String ip, String password){
     this.setUsername(username);
     this.setIp(ip);

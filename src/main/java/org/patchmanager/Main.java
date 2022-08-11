@@ -31,37 +31,21 @@ public class Main {
   public static void main(String[] args) throws Exception {
     Logger LOGGER = null;
     new DotEnvUser();
+    Scanner scanner = new Scanner(System.in);
+    ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
+    ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
+
     try {
       LOGGER = LogManager.getLogger(Main.class);
     } catch (Exception e) {
       System.out.println("log4j2.xml cannot be found");
       System.exit(-1);
     }
-    LOGGER.debug("Started the main function");
-
-    Scanner scanner = new Scanner(System.in);
-    ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
-    ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
+    //LOGGER.debug("Started the main function");
+    //new BuildAndTransfer().buildAndTransfer(zitsvyUsr);
     new PipedShell(labUsr);
 
     /*
-    SshClient client = SshClient.setUpDefaultClient();
-    ClientSession session = new CreateSshSession().createSshSession(labUsr, client);
-    ClientChannel channel = session.createChannel(Channel.CHANNEL_SHELL);
-    channel.open().verify(2000);
-    new ServerWelcomeMessage().displayWelcomeMessage(channel);
-    *//*new PassCmdToChannel().passCmdToChannel("pwd", channel);
-    new PassCmdToChannel().passCmdToChannel("cdwae", channel);
-    new PassCmdToChannel().passCmdToChannel("cd base/modules/webapps/wae-admin-rest-war/", channel);
-    new PassCmdToChannel().passCmdToChannel("ls", channel);
-    new PassCmdToChannel().passCmdToChannel("git checkout spidr_4.8.1_patch", channel);
-    new PassCmdToChannel().passCmdToChannel("git pull", channel);
-    new PassCmdToChannel().passCmdToChannel("ls", channel);
-    new PassCmdToChannel().passCmdToChannel("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install", channel);
-    new PassCmdToChannel().passCmdToChannel("ls", channel);
-    new PassCmdToChannel().passCmdToChannel("scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war ntsysadm@47.168.150.36:/tmp/", channel);
-    new PassCmdToChannel().passPasswordToChannel(DotEnvUser.zitsvypassword, channel);
-    new PassCmdToChannel().passPasswordToChannel(DotEnvUser.labpassword, channel);*//*
     String cmd = "";
     while (true) {
       System.out.println("Write a linux command or write !! to exit");
@@ -72,9 +56,7 @@ public class Main {
       }
       new PassCmdToChannel().passCmdToChannel(cmd, channel);
     }
-    channel.close();
-    session.close();
-    client.close();*/
+    */
 
     /*
     String labelInput = "";
@@ -169,6 +151,7 @@ public class Main {
     LOGGER.info("Finishing the main function");
      */
   }
+
   //make parse string response shorter
   //check style
   //check performance of long regex

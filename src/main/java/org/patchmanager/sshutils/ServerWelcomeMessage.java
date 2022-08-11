@@ -13,6 +13,11 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class ServerWelcomeMessage {
+  /**
+   * Waits and returns the initial output the server returns when a connection is established
+   * @param channel
+   * @throws Exception
+   */
   public void displayWelcomeMessage(ClientChannel channel) throws Exception {
     ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
     ByteArrayOutputStream errorStream = new ByteArrayOutputStream();

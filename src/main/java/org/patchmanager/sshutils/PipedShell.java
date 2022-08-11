@@ -15,6 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 public class PipedShell {
   DotEnvUser dotEnvUserObj = new DotEnvUser();
+
+  /**
+   * Creates a piped shell that works similar to a regular terminal
+   * @param serverUser serverUser object to conenct to server with certain user credentals
+   * @throws Exception
+   */
   public PipedShell(ServerUser serverUser) throws Exception {
     SshClient client = SshClient.setUpDefaultClient();
     client.start();
@@ -38,8 +44,16 @@ public class PipedShell {
           channel.waitFor(EnumSet.of(ClientChannelEvent.CLOSED), 500);
           System.out.println(new String(responseStream.toByteArray()));
           while (true) {
-            System.out.println("Write a linux or command or write !! to exit");
+            System.out.println("Write a linux command, start with -p if entering a password and write !! to exit");
             cmd = scanner.nextLine();
+            if (cmd.substring(0,2).equals("-p")) {
+              cmd = cmd.substring(3) + "\n";
+              pipedIn.write(cmd.getBytes());
+              pipedIn.flush();
+              channel.waitFor(EnumSet.of(ClientChannelEvent.CLOSED), 1000);
+              System.out.println(responseStream);
+              continue;
+            }
             cmd = cmd + ";echo \"END_OF_COMMAND\"\n";
             if (cmd.equals("!!;echo \"END_OF_COMMAND\"\n")){
               break;
@@ -47,9 +61,6 @@ public class PipedShell {
             pipedIn.write(cmd.getBytes());
             pipedIn.flush();
             System.out.println(getCmdOutput(responseStream));
-            //channel.waitFor(EnumSet.of(ClientChannelEvent.EOF), 125);
-            //System.out.println(new String(responseStream.toByteArray()));
-            //responseStream.reset();
           }
           System.out.println("Terminating the program");
           String error = new String(errorStream.toByteArray());
@@ -64,6 +75,12 @@ public class PipedShell {
       client.stop();
     }
   }
+  /**
+   * Loops through the response constantly to catch when the server executes echo END_OF_COMMAND
+   * returns the respons as string
+   * @param outputStream is the response of the server
+   * @return output of the server after the command is executed
+   */
   public String getCmdOutput(ByteArrayOutputStream outputStream) {
     while (outputStream.toString().indexOf("\nEND_OF_COMMAND") <= 0 && outputStream.toString().indexOf("'s password:") <= 0) {}
     String output = outputStream.toString ();
