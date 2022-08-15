@@ -13,6 +13,8 @@ import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static org.patchmanager.sshutils.CommandOutput.getCmdOutput;
+
 public class PipedShell {
   DotEnvUser dotEnvUserObj = new DotEnvUser();
 
@@ -74,18 +76,6 @@ public class PipedShell {
     } finally {
       client.stop();
     }
-  }
-  /**
-   * Loops through the response constantly to catch when the server executes echo END_OF_COMMAND
-   * returns the respons as string
-   * @param outputStream is the response of the server
-   * @return output of the server after the command is executed
-   */
-  public String getCmdOutput(ByteArrayOutputStream outputStream) {
-    while (outputStream.toString().indexOf("\nEND_OF_COMMAND") <= 0 && outputStream.toString().indexOf("'s password:") <= 0) {}
-    String output = outputStream.toString ();
-    outputStream.reset ();
-    return output;
   }
 }
 

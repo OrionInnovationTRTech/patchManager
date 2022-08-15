@@ -17,6 +17,8 @@ import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static org.patchmanager.sshutils.IncrementGAVersion.incrementGAVersion;
+
 
 /**
  * Main class that links all the methods.
@@ -29,22 +31,36 @@ public class Main {
    *             --version --label --patch or their short versions
    */
   public static void main(String[] args) throws Exception {
+    long start = System.currentTimeMillis();
     Logger LOGGER = null;
     new DotEnvUser();
     Scanner scanner = new Scanner(System.in);
     ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
     ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
-
     try {
       LOGGER = LogManager.getLogger(Main.class);
     } catch (Exception e) {
       System.out.println("log4j2.xml cannot be found");
       System.exit(-1);
     }
-    //LOGGER.debug("Started the main function");
+    LOGGER.debug("Started the main function");
     //new BuildAndTransfer().buildAndTransfer(zitsvyUsr);
-    new PipedShell(labUsr);
+    //new PipedShell(labUsr);
+    new Maverick().maverick(zitsvyUsr);
+    //new NewClass().newClass(labUsr);
+   /* incrementGAVersion("aa00",210);
+    incrementGAVersion("aa97",5);
+    incrementGAVersion("aa95",5);
+    incrementGAVersion("ab97",5);
+    incrementGAVersion("az97",5);
+    incrementGAVersion("ba97",5);
+    incrementGAVersion("bz97",5);
+    incrementGAVersion("zb97",5);
 
+
+    for (int i = 0; i < 199 ;i++) {
+      incrementGAVersion("aa01",i);
+    }*/
     /*
     String cmd = "";
     while (true) {
@@ -150,6 +166,10 @@ public class Main {
     }
     LOGGER.info("Finishing the main function");
      */
+    long finish = System.currentTimeMillis();
+    double timeElapsed = finish - start;
+    System.out.println(timeElapsed/1000);
+    System.out.println("seconds passed");
   }
 
   //make parse string response shorter

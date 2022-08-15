@@ -3,6 +3,8 @@ package org.patchmanager.sshutils;
 import org.apache.sshd.client.channel.ClientChannel;
 import java.io.*;
 
+import static org.patchmanager.sshutils.CommandOutput.getCmdOutput;
+
 public class PassCmdToChannel {
   /**
    * Writes the command to channel and prints out the output, adds ;echo END_OF_COMMAND to the end of the command
@@ -26,20 +28,6 @@ public class PassCmdToChannel {
       throw new Exception(error);
     }
   }
-
-  /**
-   * Loops through the response constantly to catch when the server executes echo END_OF_COMMAND
-   * returns the respons as string
-   * @param outputStream is the response of the server
-   * @return output of the server after the command is executed
-   */
-  public String getCmdOutput(ByteArrayOutputStream outputStream) {
-    while (outputStream.toString().indexOf("\nEND_OF_COMMAND") <= 0 && outputStream.toString().indexOf("'s password:") <= 0) {}
-    String output = outputStream.toString ();
-    outputStream.reset ();
-    return output;
-  }
-
   /**
    * Used to pass the passwords to the channel
    * Since the normal command passing function adds echo END_OF_COMMAND to the end,
