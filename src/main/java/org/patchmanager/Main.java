@@ -9,6 +9,10 @@ import org.apache.sshd.client.channel.ClientChannelEvent;
 import org.apache.sshd.client.session.ClientSession;
 import org.apache.sshd.common.channel.Channel;
 import org.patchmanager.apiutils.DotEnvUser;
+import org.patchmanager.maverickshhutils.MaverickBuildAndTransfer;
+import org.patchmanager.maverickshhutils.MaverickFCCreation;
+import org.patchmanager.maverickshhutils.MaverickPipedShell;
+import org.patchmanager.maverickshhutils.MaverickRunCommand;
 import org.patchmanager.sshutils.*;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +20,6 @@ import java.io.OutputStream;
 import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-
 import static org.patchmanager.sshutils.IncrementGAVersion.incrementGAVersion;
 
 
@@ -46,7 +49,11 @@ public class Main {
     LOGGER.debug("Started the main function");
     //new BuildAndTransfer().buildAndTransfer(zitsvyUsr);
     //new PipedShell(labUsr);
-    new Maverick().maverick(zitsvyUsr);
+    //new Maverick().maverick(zitsvyUsr);
+    //new MaverickFCCreation().maverickFCCreation(zitsvyUsr);
+    new MaverickPipedShell().maverickPipedShell(labUsr);
+    //new MaverickRunCommand().maverickRunCommand(labUsr, "ls -lh");
+    //new MaverickBuildAndTransfer().maverickBuildAndTransfer(zitsvyUsr);
     //new NewClass().newClass(labUsr);
    /* incrementGAVersion("aa00",210);
     incrementGAVersion("aa97",5);

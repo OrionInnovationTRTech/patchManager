@@ -1,4 +1,4 @@
-package org.patchmanager.sshutils;
+package org.patchmanager.maverickshhutils;
 
 import com.sshtools.client.shell.ShellProcess;
 
