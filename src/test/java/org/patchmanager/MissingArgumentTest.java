@@ -43,7 +43,7 @@ public class MissingArgumentTest {
   public void shouldGiveMissingOptionMissingArgumentException(String[] args) throws ParseException {
     //String[] args = new String[] { "-v", "asd"};
     CommandLine commandLine = optionsRelatedObj.commandLineParser.parse(optionsRelatedObj.optionsList, args);
-    Exception exception = assertThrows(MissingArgumentException.class, () -> MissingOptionChecker.missingOptionChecker(commandLine));
+    Exception exception = assertThrows(MissingArgumentException.class, () -> MissingOptionChecker.missingOptionChecker(commandLine,"asd"));
     String expectedMessage = "There is a missing option";
     String actualMessage = exception.getMessage();
     assertTrue(actualMessage.contains(expectedMessage));

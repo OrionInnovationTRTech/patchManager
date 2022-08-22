@@ -1,26 +1,33 @@
 package org.patchmanager;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.sshd.client.SshClient;
-import org.apache.sshd.client.channel.ChannelExec;
-import org.apache.sshd.client.channel.ClientChannel;
-import org.apache.sshd.client.channel.ClientChannelEvent;
-import org.apache.sshd.client.session.ClientSession;
-import org.apache.sshd.common.channel.Channel;
 import org.patchmanager.apiutils.DotEnvUser;
+import org.patchmanager.apiutils.HttpRequestAndResponse;
+import org.patchmanager.cli.OptionsRelated;
 import org.patchmanager.maverickshhutils.MaverickBuildAndTransfer;
 import org.patchmanager.maverickshhutils.MaverickFCCreation;
-import org.patchmanager.maverickshhutils.MaverickPipedShell;
-import org.patchmanager.maverickshhutils.MaverickRunCommand;
+import org.patchmanager.maverickshhutils.MaverickTerminal;
 import org.patchmanager.sshutils.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.EnumSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-import static org.patchmanager.sshutils.IncrementGAVersion.incrementGAVersion;
+
+import static org.patchmanager.apiutils.AuthChecker.checkAuth;
+import static org.patchmanager.apiutils.ParseJiraIssues.parseJiraIssues;
+import static org.patchmanager.cli.MissingOptionChecker.missingOptionChecker;
+import static org.patchmanager.cli.OptionsRelated.*;
+import static org.patchmanager.cli.PatchIncreaseInputChecker.patchIncreaseInputChecker;
+import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
+import static org.patchmanager.cli.PrintHelpCmd.printHelpCmd;
+import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
+import static org.patchmanager.io.DecideFileName.fileNameDecider;
+import static org.patchmanager.io.WriteIntro.writeIntro;
+import static org.patchmanager.io.WriteOutro.writeOutro;
+import static org.patchmanager.io.WriteToFile.writeToFile;
 
 
 /**
@@ -40,6 +47,8 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
     ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
+    String terminalUser;
+    String switchValue = "noValue";
     try {
       LOGGER = LogManager.getLogger(Main.class);
     } catch (Exception e) {
@@ -47,68 +56,117 @@ public class Main {
       System.exit(-1);
     }
     LOGGER.debug("Started the main function");
-    //new BuildAndTransfer().buildAndTransfer(zitsvyUsr);
-    //new PipedShell(labUsr);
-    //new Maverick().maverick(zitsvyUsr);
-    //new MaverickFCCreation().maverickFCCreation(zitsvyUsr);
-    new MaverickPipedShell().maverickPipedShell(labUsr);
-    //new MaverickRunCommand().maverickRunCommand(labUsr, "ls -lh");
-    //new MaverickBuildAndTransfer().maverickBuildAndTransfer(zitsvyUsr);
-    //new NewClass().newClass(labUsr);
-   /* incrementGAVersion("aa00",210);
-    incrementGAVersion("aa97",5);
-    incrementGAVersion("aa95",5);
-    incrementGAVersion("ab97",5);
-    incrementGAVersion("az97",5);
-    incrementGAVersion("ba97",5);
-    incrementGAVersion("bz97",5);
-    incrementGAVersion("zb97",5);
-
-
-    for (int i = 0; i < 199 ;i++) {
-      incrementGAVersion("aa01",i);
-    }*/
-    /*
-    String cmd = "";
-    while (true) {
-      System.out.println("Write a linux command or write !! to exit");
-      cmd = scanner.nextLine();
-      if (cmd.equals("!!")) {
-        System.out.println("Terminating the program");
-        break;
-      }
-      new PassCmdToChannel().passCmdToChannel(cmd, channel);
-    }
-    */
-
-    /*
     String labelInput = "";
     String versionInput = "";
     String patchInput = "";
     OptionsRelated optionsRelatedObj = new OptionsRelated();
+    CommandLine commandLine = null;
 
     try {
-      CommandLine commandLine = null;
-      try {
-        LOGGER.info("Parsing commandline");
-        commandLine = optionsRelatedObj.commandLineParser.parse(optionsList, args);
-      } catch (ParseException e) {
-        LOGGER.fatal(e.getMessage());
-        printHelpCmd(optionsList);
-        System.exit(-1);
-      }
-
+      LOGGER.info("Parsing commandline");
+      commandLine = optionsRelatedObj.commandLineParser.parse(optionsList, args);
+    } catch (ParseException e) {
+      LOGGER.fatal(e.getMessage());
+      printHelpCmd(optionsList);
+      System.exit(-1);
+    }
+    try {
+      //if the checker methods are turned to single methods with try catch, tests in IntelliJ terminates without testing
       try {
         LOGGER.info("Checking if there is a missing option");
-        missingOptionChecker(commandLine);
+        switchValue = missingOptionChecker(commandLine, switchValue);
       } catch (Exception e) {
         LOGGER.fatal("There is a missing option");
         printHelpCmd(optionsList);
         System.exit(-1);
       }
 
-      labelInput = commandLine.getOptionValue(LABEL);
+      if (switchValue.equals("JiraIssueToText")) {
+        labelInput = commandLine.getOptionValue(LABEL);
 
+        try {
+          LOGGER.info("Checking if the version is in correct form");
+          versionInputChecker(commandLine);
+        } catch (Exception e) {
+          LOGGER.fatal("Version does not fit the criteria");
+          printHelpCmd(optionsList);
+          System.exit(-1);
+        }
+
+        versionInput = commandLine.getOptionValue(VERSION);
+
+
+        try {
+          LOGGER.info("Checking if the patch is in correct form");
+          patchInputChecker(commandLine);
+        } catch (Exception e) {
+          LOGGER.fatal("Patch does not fit the criteria");
+          printHelpCmd(optionsList);
+          System.exit(-1);
+        }
+        patchInput = commandLine.getOptionValue(PATCH);
+      }
+    } catch (Exception e) {
+      LOGGER.fatal(e.getMessage());
+    }
+
+
+    if (switchValue.equals("JiraIssueToText")) {
+      LOGGER.info("Jira Issue to Text Service Starting");
+      LOGGER.info("Trying to authorize");
+      DotEnvUser dotEnvUserObj = new DotEnvUser();
+
+
+      if (!checkAuth(dotEnvUserObj.email, dotEnvUserObj.api)) {
+        LOGGER.fatal("Couldn't authorize, check credentials");
+        System.exit(-1);
+      }
+
+      LOGGER.info("Defining version values");
+      //There are 2 versions that are used, a higher one e.g. 9.8.1 and a lower one e.g. 4.8.1
+      //Split by numbers
+      String[] splitVersionByNumbers = versionInput.split("(\\D+)");
+      String versionHigher = String.join(".", splitVersionByNumbers[0], splitVersionByNumbers[1], splitVersionByNumbers[2]);
+      String lowerFirstNoByFive = String.valueOf(Integer.parseInt(splitVersionByNumbers[0]) - 5);
+      String versionLower = String.join(".", lowerFirstNoByFive, splitVersionByNumbers[1], splitVersionByNumbers[2]);
+
+      LOGGER.info("Creating a variable for today's date");
+      Date date = new Date();
+      SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat("yyyyMMdd");
+      String strDate = simpleDateFormatObj.format(date);
+
+      LOGGER.info("Deciding on filename");
+      String fileName = fileNameDecider(patchInput, versionInput);
+
+      LOGGER.info("Trying to send a Http Request to the API and get a response");
+      HttpRequestAndResponse httpRequestAndResponse = new HttpRequestAndResponse(labelInput);
+      String parsedJiraIssues = parseJiraIssues(httpRequestAndResponse.response.body(), versionLower, patchInput);
+      if (!parsedJiraIssues.isEmpty()) {
+        StringBuilder finalStr = new StringBuilder();
+        finalStr.append(writeIntro(patchInput, versionLower, versionHigher, versionInput, strDate))
+            .append(parsedJiraIssues)
+            .append(writeOutro(patchInput, versionHigher));
+        writeToFile(finalStr.toString(), fileName);
+      } else {
+        LOGGER.fatal("No issues found with that label");
+        System.exit(-1);
+      }
+    } else if (switchValue.equals("TERMINAL")) {
+      terminalUser = commandLine.getOptionValue(TERMINAL);
+      LOGGER.info("Terminal Service Starting");
+      if (terminalUser.equals("labUsr")){
+        LOGGER.info("Connecting to lab");
+        new MaverickTerminal().maverickPipedShell(labUsr);
+      }else {
+        LOGGER.info("Connecting to zitsvy");
+        new MaverickTerminal().maverickPipedShell(zitsvyUsr);
+      }
+
+    } else if (switchValue.equals("MVNINSTALL")) {
+      LOGGER.info("Maven build and transfer war file");
+      new MaverickBuildAndTransfer().maverickBuildAndTransfer(zitsvyUsr);
+    } else if (switchValue.equals("FCCREATION")) {
+      LOGGER.info("FC Creation");
       try {
         LOGGER.info("Checking if the version is in correct form");
         versionInputChecker(commandLine);
@@ -117,62 +175,25 @@ public class Main {
         printHelpCmd(optionsList);
         System.exit(-1);
       }
-
       versionInput = commandLine.getOptionValue(VERSION);
 
-
       try {
-        LOGGER.info("Checking if the patch is in correct form");
-        patchInputChecker(commandLine);
+        LOGGER.info("Checking if the patch increase value is in correct form");
+        patchIncreaseInputChecker(commandLine);
       } catch (Exception e) {
-        LOGGER.fatal("Patch does not fit the criteria");
+        LOGGER.fatal("Patch increase value does not fit the criteria");
         printHelpCmd(optionsList);
         System.exit(-1);
       }
-      patchInput = commandLine.getOptionValue(PATCH);
-    } catch (Exception e) {
-      LOGGER.fatal(e.getMessage());
-    }
-    LOGGER.info("Trying to authorize");
-    DotEnvUser dotEnvUserObj = new DotEnvUser();
+      String patchIncrease = commandLine.getOptionValue(FCCREATION);
+      new MaverickFCCreation().maverickFCCreation(zitsvyUsr, versionInput, patchIncrease);
 
-
-    if (!checkAuth(dotEnvUserObj.email, dotEnvUserObj.api)) {
-      LOGGER.fatal("Couldn't authorize, check credentials");
-      System.exit(-1);
-    }
-
-    LOGGER.info("Defining version values");
-    //There are 2 versions that are used, a higher one e.g. 9.8.1 and a lower one e.g. 4.8.1
-    //Split by numbers
-    String[] splitVersionByNumbers = versionInput.split("(\\D+)");
-    String versionHigher = String.join(".", splitVersionByNumbers[0], splitVersionByNumbers[1], splitVersionByNumbers[2]);
-    String lowerFirstNoByFive = String.valueOf(Integer.parseInt(splitVersionByNumbers[0]) - 5);
-    String versionLower = String.join(".", lowerFirstNoByFive, splitVersionByNumbers[1], splitVersionByNumbers[2]);
-
-    LOGGER.info("Creating a variable for today's date");
-    Date date = new Date();
-    SimpleDateFormat simpleDateFormatObj = new SimpleDateFormat("yyyyMMdd");
-    String strDate = simpleDateFormatObj.format(date);
-
-    LOGGER.info("Deciding on filename");
-    String fileName = fileNameDecider(patchInput, versionInput);
-
-    LOGGER.info("Trying to send a Http Request to the API and get a response");
-    HttpRequestAndResponse httpRequestAndResponse = new HttpRequestAndResponse(labelInput);
-    String parsedJiraIssues = parseJiraIssues(httpRequestAndResponse.response.body(), versionLower, patchInput);
-    if (!parsedJiraIssues.isEmpty()) {
-      StringBuilder finalStr = new StringBuilder();
-      finalStr.append(writeIntro(patchInput, versionLower, versionHigher, versionInput, strDate))
-          .append(parsedJiraIssues)
-          .append(writeOutro(patchInput, versionHigher));
-      writeToFile(finalStr.toString(), fileName);
-    } else {
-      LOGGER.fatal("No issues found with that label");
-      System.exit(-1);
+    } else if (switchValue.equals("PATCHCREATION")) {
+      LOGGER.info("Testing newclass");
+      new NewClass2().newClass2(labUsr);
     }
     LOGGER.info("Finishing the main function");
-     */
+    //check if fc and patch files exists
     long finish = System.currentTimeMillis();
     double timeElapsed = finish - start;
     System.out.println(timeElapsed/1000);
@@ -182,5 +203,7 @@ public class Main {
   //make parse string response shorter
   //check style
   //check performance of long regex
-
+//username sifre input
+  //scp transfel destination user ip password directory
+  //rc 0
 }

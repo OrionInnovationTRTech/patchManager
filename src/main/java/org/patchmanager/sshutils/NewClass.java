@@ -4,15 +4,30 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.channel.ClientChannel;
+import org.apache.sshd.client.channel.ClientChannelEvent;
 import org.apache.sshd.client.session.ClientSession;
 import org.apache.sshd.common.channel.Channel;
+import org.apache.sshd.common.channel.ChannelAsyncInputStream;
+import org.apache.sshd.common.future.WaitableFuture;
+import org.apache.sshd.common.io.IoOutputStream;
+import org.apache.sshd.common.io.IoWriteFuture;
+import org.apache.sshd.common.util.Readable;
+import org.apache.sshd.common.util.buffer.Buffer;
+import org.apache.sshd.common.util.buffer.ByteArrayBuffer;
+import org.apache.sshd.common.util.io.input.NoCloseInputStream;
+import org.apache.sshd.common.util.io.output.NoCloseOutputStream;
+import org.apache.sshd.server.command.AsyncCommand;
 import org.patchmanager.apiutils.DotEnvUser;
 import org.patchmanager.cli.MissingOptionChecker;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.SocketTimeoutException;
+import java.util.List;
+import java.util.Set;
 
 public class NewClass {
-  static final Logger LOGGER = LogManager.getLogger(BuildAndTransfer.class);
+  static final Logger LOGGER = LogManager.getLogger(NewClass.class);
 
   /**
    * In /wae-admin-rest-war
@@ -28,11 +43,27 @@ public class NewClass {
         session = new CreateSshSession().createSshSession(serverUser, client);
         ClientChannel channel = null;
         try {
-          channel = session.createChannel(Channel.CHANNEL_SHELL);
+          String command = "su";
+          channel = session.createExecChannel("su");
+          //channel = session.createShellChannel();
           try {
-            channel.open().verify(2000);
+            //channel.setStreaming(ClientChannel.Streaming.Async);
             new ServerWelcomeMessage().displayWelcomeMessage(channel);
-            new PassCmdToChannel().passCmdToChannel("tail -f /home/ntsysadm/test", channel);
+            NoCloseInputStream ncis = new NoCloseInputStream(System.in);
+            NoCloseOutputStream ncos = new NoCloseOutputStream(System.out);
+            NoCloseOutputStream ncee = new NoCloseOutputStream(System.err);
+            channel.setIn(ncis);
+            channel.setOut(ncos);
+            channel.setErr(ncee);
+            WaitableFuture wf = channel.open();
+            Set<ClientChannelEvent> waitMask = channel.waitFor(List.of(ClientChannelEvent.CLOSED), 0L);
+            if (waitMask.contains(ClientChannelEvent.TIMEOUT)) {
+              throw new SocketTimeoutException("Failed to retrieve command result in time: " + command);
+            }
+            Integer exitStatus = channel.getExitStatus();
+            System.out.println("Exit status :" + exitStatus);
+
+
           } catch (Exception e) {
             LOGGER.fatal("Problem opening channel and sending commands" + e.getMessage());
           }

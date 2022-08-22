@@ -10,17 +10,22 @@ import static org.patchmanager.cli.OptionsRelated.*;
 public class MissingOptionChecker {
   static final Logger LOGGER = LogManager.getLogger(MissingOptionChecker.class);
 
-  public static void missingOptionChecker(CommandLine commandLine) throws MissingArgumentException {
+  public static String missingOptionChecker(CommandLine commandLine, String switchValue) throws MissingArgumentException {
     LOGGER.debug("Checking if there is a missing option");
-    // if one of p v l is empty and if there is no other option
-    if ( (!commandLine.hasOption(PATCH.getOpt())
-        || !commandLine.hasOption(VERSION.getOpt())
-        || !commandLine.hasOption(LABEL.getOpt()))
-        && !commandLine.hasOption(MVNINSTALL.getOpt())
-        && !commandLine.hasOption(FCCREATION.getOpt())
-        && !commandLine.hasOption(PATCHCREATION.getOpt())) {
+    if  (commandLine.hasOption(PATCH.getOpt()) && commandLine.hasOption(VERSION.getOpt())
+        && commandLine.hasOption(LABEL.getOpt())) {
+      switchValue = "JiraIssueToText";
+    } else if (commandLine.hasOption(TERMINAL.getOpt())) {
+      switchValue = "TERMINAL";
+    } else if (commandLine.hasOption(FCCREATION.getOpt()) && commandLine.hasOption(VERSION.getOpt())) {
+      switchValue = "FCCREATION";
+    } else if (commandLine.hasOption(MVNINSTALL.getOpt())) {
+      switchValue = "MVNINSTALL";
+    } else if (commandLine.hasOption(PATCHCREATION.getOpt())) {
+      switchValue = "PATCHCREATION";
+    } else {
       throw new MissingArgumentException("There is a missing option");
     }
-
+    return switchValue;
   }
 }
