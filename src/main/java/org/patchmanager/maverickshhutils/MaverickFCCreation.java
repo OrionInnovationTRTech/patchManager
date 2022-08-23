@@ -2,13 +2,10 @@ package org.patchmanager.maverickshhutils;
 
 import com.sshtools.client.*;
 import com.sshtools.client.shell.ExpectShell;
-import com.sshtools.client.shell.ShellProcess;
-import com.sshtools.client.shell.ShellProcessController;
 import com.sshtools.client.shell.ShellTimeoutException;
 import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.sshutils.ServerUser;
 
 import java.io.IOException;
 
@@ -34,11 +31,12 @@ public class MaverickFCCreation {
           printCommandOutputLines(shell.executeCommand("gitwaeall"));
           printCommandOutputLines(shell.executeCommand("git checkout spidr_4.8.1_patch"));
           printCommandOutputLines(shell.executeCommand("git pull"));
-          printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/"+ increasedGA +"/' ../pom.xml"));
+          printCommandOutputLines(shell.executeCommand("sed -i.bak 's/dm95/"+ "dm67" +"/' ../pom.xml"));
           LOGGER.info("-p "+ fixCount +" -c FC_"+ versionHigher+"."+ increasedGA +"_Checksums.txt");
-          printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
+          //printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
           //printCommandOutputLines(shell.executeCommand("../patch/genSpidrPatch.sh -m FC"));
-          printCommandOutputLines(shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p "+ fixCount +" -c FC_"+ versionHigher+"."+ increasedGA +"_Checksums.txt"));
+          printCommandOutputLines(shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p "+ 3 +" -c FC_"+ versionHigher +"."+ "dm64" +"_Checksums.txt"));
+          printCommandOutputLines(shell.executeCommand("sed -i.bak 's/dm67/"+ "aa01" +"/' ../pom.xml"));
         }
       });
       //take branch as input

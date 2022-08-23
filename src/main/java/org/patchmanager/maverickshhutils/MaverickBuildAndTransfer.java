@@ -2,16 +2,13 @@ package org.patchmanager.maverickshhutils;
 
 import com.sshtools.client.*;
 import com.sshtools.client.shell.ExpectShell;
-import com.sshtools.client.shell.ShellProcess;
 import com.sshtools.client.shell.ShellProcessController;
 import com.sshtools.client.shell.ShellTimeoutException;
 import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.Main;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.sshutils.ServerUser;
 
 import java.io.IOException;
 
@@ -34,6 +31,8 @@ public class MaverickBuildAndTransfer {
           printCommandOutputLines(shell.executeCommand("git checkout spidr_4.8.1_patch"));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
+          LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
+          printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
           LOGGER.info("Sending scp");
           ShellProcessController controller =  new ShellProcessController(
               shell.executeCommand("scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war  ntsysadm@47.168.150.36:/tmp/"));

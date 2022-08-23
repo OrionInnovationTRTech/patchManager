@@ -22,4 +22,21 @@ public class PatchInputChecker {
     }
 
   }
+
+  /**
+   * Checks if the patch is in integer form
+   * @param patch is user input
+   * @return true if in integer form, false if not
+   */
+  public static boolean patchInputChecker(String patch) {
+    LOGGER.debug("Checking if the patch fits the criteria");
+    //Regex is in the form of number
+    Pattern patternPatch = Pattern.compile("\\d+");
+    Matcher matcherPatch = patternPatch.matcher(patch);
+    if (!matcherPatch.matches()) {
+      return false;
+    }
+    return true;
+
+  }
 }

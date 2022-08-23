@@ -7,7 +7,7 @@ import org.apache.sshd.client.channel.ClientChannel;
 import org.apache.sshd.client.session.ClientSession;
 import org.apache.sshd.common.channel.Channel;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.cli.MissingOptionChecker;
+import org.patchmanager.maverickshhutils.ServerUser;
 
 import java.io.IOException;
 

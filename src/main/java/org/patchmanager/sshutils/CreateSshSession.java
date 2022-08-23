@@ -1,17 +1,11 @@
 package org.patchmanager.sshutils;
 
 import org.apache.sshd.client.SshClient;
-import org.apache.sshd.client.channel.ClientChannel;
-import org.apache.sshd.client.channel.ClientChannelEvent;
 import org.apache.sshd.client.session.ClientSession;
-import org.apache.sshd.common.channel.Channel;
 import org.patchmanager.apiutils.DotEnvUser;
+import org.patchmanager.maverickshhutils.ServerUser;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.EnumSet;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class CreateSshSession {

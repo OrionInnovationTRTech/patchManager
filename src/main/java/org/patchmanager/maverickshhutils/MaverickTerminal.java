@@ -6,7 +6,6 @@ import com.sshtools.client.shell.ShellTimeoutException;
 import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.sshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;

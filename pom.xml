@@ -30,12 +30,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
@@ -91,16 +85,6 @@
             <groupId>com.sshtools</groupId>
             <artifactId>maverick-synergy-client</artifactId>
             <version>3.0.8</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.linoleum</groupId>
-            <artifactId>jcterm</artifactId>
-            <version>0.0.11</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.mwiede</groupId>
-            <artifactId>jsch</artifactId>
-            <version>0.2.2</version>
         </dependency>
 
     </dependencies>

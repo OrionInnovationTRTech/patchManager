@@ -2,13 +2,10 @@ package org.patchmanager.maverickshhutils;
 
 import com.sshtools.client.*;
 import com.sshtools.client.shell.ExpectShell;
-import com.sshtools.client.shell.ShellProcess;
-import com.sshtools.client.shell.ShellProcessController;
 import com.sshtools.client.shell.ShellTimeoutException;
 import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.sshutils.ServerUser;
 
 import java.io.IOException;
 

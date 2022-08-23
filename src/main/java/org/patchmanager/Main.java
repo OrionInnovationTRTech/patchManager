@@ -10,6 +10,7 @@ import org.patchmanager.cli.OptionsRelated;
 import org.patchmanager.maverickshhutils.MaverickBuildAndTransfer;
 import org.patchmanager.maverickshhutils.MaverickFCCreation;
 import org.patchmanager.maverickshhutils.MaverickTerminal;
+import org.patchmanager.maverickshhutils.ServerUser;
 import org.patchmanager.sshutils.*;
 
 import java.text.SimpleDateFormat;

@@ -23,4 +23,21 @@ public class VersionInputChecker {
     }
 
   }
+
+  /**
+   * Returns false if the version isn't in the correct form which is number . number . number . twoChars number
+   * @param version
+   * @return true if correct form false if not in correct form
+   */
+  public static boolean versionInputChecker(String version) {
+    LOGGER.debug("Checking if the version fits the criteria");
+    Pattern patternVersion = Pattern.compile("\\d+.\\d+.\\d+.[a-zA-Z]{2}\\d{2}");
+    Matcher matcherVersion = patternVersion.matcher(version);
+
+    if (!matcherVersion.matches()) {
+      return false;
+    }
+    return true;
+
+  }
 }
