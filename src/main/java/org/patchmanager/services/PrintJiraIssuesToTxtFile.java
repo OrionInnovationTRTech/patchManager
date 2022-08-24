@@ -1,13 +1,9 @@
 package org.patchmanager.services;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
 import org.patchmanager.apiutils.HttpRequestAndResponse;
-import org.patchmanager.cli.OptionsRelated;
-import org.patchmanager.menu.Menu;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,10 +11,7 @@ import java.util.Scanner;
 
 import static org.patchmanager.apiutils.AuthChecker.checkAuth;
 import static org.patchmanager.apiutils.ParseJiraIssues.parseJiraIssues;
-import static org.patchmanager.cli.MissingOptionChecker.missingOptionChecker;
-import static org.patchmanager.cli.OptionsRelated.*;
 import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.PrintHelpCmd.printHelpCmd;
 import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
 import static org.patchmanager.io.DecideFileName.fileNameDecider;
 import static org.patchmanager.io.WriteIntro.writeIntro;
@@ -36,17 +29,17 @@ public class PrintJiraIssuesToTxtFile {
     System.out.print("Enter the label: ");
     labelInput = scanner.nextLine();
 
-    System.out.println("Enter the version in the form of 9.8.1.dm10: ");
+    System.out.print("Enter the version in the form of 9.8.1.dm10: ");
     versionInput = scanner.nextLine();
-    while(versionInputChecker(versionInput)){
-      System.out.println("Wrong version format, enter again: ");
+    while(!versionInputChecker(versionInput)){
+      System.out.print("Wrong version format, enter again: ");
       versionInput = scanner.nextLine();
     }
 
-    System.out.println("Enter the patch in the form of an integer: ");
+    System.out.print("Enter the patch in the form of an integer: ");
     patchInput = scanner.nextLine();
-    while(patchInputChecker(patchInput)){
-      System.out.println("Wrong patch format, enter again: ");
+    while(!patchInputChecker(patchInput)){
+      System.out.print("Wrong patch format, enter again: ");
       patchInput = scanner.nextLine();
     }
 

@@ -1,34 +1,12 @@
 package org.patchmanager;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.apiutils.HttpRequestAndResponse;
-import org.patchmanager.cli.OptionsRelated;
-import org.patchmanager.maverickshhutils.MaverickBuildAndTransfer;
-import org.patchmanager.maverickshhutils.MaverickFCCreation;
-import org.patchmanager.maverickshhutils.MaverickTerminal;
-import org.patchmanager.maverickshhutils.ServerUser;
-import org.patchmanager.sshutils.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
-
-import static org.patchmanager.apiutils.AuthChecker.checkAuth;
-import static org.patchmanager.apiutils.ParseJiraIssues.parseJiraIssues;
-import static org.patchmanager.cli.MissingOptionChecker.missingOptionChecker;
-import static org.patchmanager.cli.OptionsRelated.*;
-import static org.patchmanager.cli.PatchIncreaseInputChecker.patchIncreaseInputChecker;
 import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.PrintHelpCmd.printHelpCmd;
 import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
-import static org.patchmanager.io.DecideFileName.fileNameDecider;
-import static org.patchmanager.io.WriteIntro.writeIntro;
-import static org.patchmanager.io.WriteOutro.writeOutro;
-import static org.patchmanager.io.WriteToFile.writeToFile;
+import static org.patchmanager.menu.MainMenu.mainMenu;
 
 
 /**
@@ -45,17 +23,19 @@ public class Main {
     long start = System.currentTimeMillis();
     Logger LOGGER = null;
     new DotEnvUser();
-    Scanner scanner = new Scanner(System.in);
-    ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
-    ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
-    String terminalUser;
-    String switchValue = "noValue";
     try {
       LOGGER = LogManager.getLogger(Main.class);
     } catch (Exception e) {
       System.out.println("log4j2.xml cannot be found");
       System.exit(-1);
     }
+    mainMenu();
+    /*Scanner scanner = new Scanner(System.in);
+    ServerUser labUsr = new ServerUser("ntsysadm","47.168.150.36", DotEnvUser.labpassword);
+    ServerUser zitsvyUsr = new ServerUser("senas","10.254.51.215",DotEnvUser.zitsvypassword,22);
+    String terminalUser;
+    String switchValue = "noValue";
+
     LOGGER.debug("Started the main function");
     String labelInput = "";
     String versionInput = "";
@@ -193,6 +173,7 @@ public class Main {
       LOGGER.info("Testing newclass");
       new NewClass2().newClass2(labUsr);
     }
+     */
     LOGGER.info("Finishing the main function");
     //check if fc and patch files exists
     long finish = System.currentTimeMillis();

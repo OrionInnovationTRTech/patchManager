@@ -9,8 +9,7 @@ import org.patchmanager.apiutils.DotEnvUser;
 
 import java.io.IOException;
 
-import static org.patchmanager.maverickshhutils.IncrementGAVersion.LOGGER;
-import static org.patchmanager.maverickshhutils.IncrementGAVersion.incrementGAVersion;
+import static org.patchmanager.maverickshhutils.IncrementLoadNo.*;
 import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class MaverickFCCreation {
@@ -22,7 +21,7 @@ public class MaverickFCCreation {
     String[] splitVersionByDot = versionInput.split("\\.");
     String gaVersion = splitVersionByDot[3];
     String versionHigher = String.join(".", splitVersionByDot[0], splitVersionByDot[1], splitVersionByDot[2]);
-    String increasedGA = incrementGAVersion(gaVersion, Integer.parseInt(fixCount));
+    String increasedGA = incrementLoadNo(gaVersion, Integer.parseInt(fixCount));
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {

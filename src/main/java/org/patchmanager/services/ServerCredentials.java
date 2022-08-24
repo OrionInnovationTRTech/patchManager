@@ -10,7 +10,7 @@ import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
 
 public class ServerCredentials {
   static Logger LOGGER = LogManager.getLogger(ServerCredentials.class);
-  public ServerUser serverUserCredentials(){
+  public static ServerUser serverUserCredentials(){
     Scanner scanner = new Scanner(System.in);
     String username = "";
     String ip = "";
