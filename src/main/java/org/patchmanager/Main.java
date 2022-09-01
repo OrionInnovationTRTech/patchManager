@@ -4,8 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.apiutils.DotEnvUser;
 
-import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
 import static org.patchmanager.menu.MainMenu.mainMenu;
 
 
@@ -181,11 +179,20 @@ public class Main {
     System.out.println(timeElapsed/1000);
     System.out.println("seconds passed");
   }
-
+//make password masked
   //make parse string response shorter
   //check style
   //check performance of long regex
-//username sifre input
+  //username sifre input
   //scp transfel destination user ip password directory
   //rc 0
+  //4.8.1.dm64te load numarası hangisi
+  //fix initial loggers
+  //jira issue printlerken version verme
+  //tam olarak fc hesaplanması
+  //zitsvyden sadece sftp, labdan sadece scp
+
+  //fc yoksa ilk patch
+  //--fc al
+  //--userdan patch noyu al
 }

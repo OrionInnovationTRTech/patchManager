@@ -45,8 +45,9 @@ public class WaeAdminResWarMavenBuild {
       });
     } catch (IOException e) {
       throw new RuntimeException(e);
-    } catch (SshException e) {
-      throw new RuntimeException(e);
+    } catch (SshException sshe) {
+      System.out.println("Problem with ssh connection");
+      LOGGER.fatal(sshe.getMessage());
     }
   }
 }

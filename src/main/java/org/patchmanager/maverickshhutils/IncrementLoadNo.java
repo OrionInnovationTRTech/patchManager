@@ -14,17 +14,20 @@ public class IncrementLoadNo {
   /**
    * Increases load number by increase amount, variable loadNoNumberPart is for 64 in dm64
    * and variable verCharPart is is for dm in dm64
-   * @param ver
+   * @param loadNo
    * @param increase
    * @return
    */
   public static String incrementLoadNo(String loadNo, int increase){
+    LOGGER.info("Starting load is: "+loadNo);
     int loadNoNumberPart = parseInt(loadNo.substring(2));
     String loadNoCharPart = loadNo.substring(0,2);
     int increasedLoadNoNumberPart = loadNoNumberPart + increase;
     NumberFormat formatter = new DecimalFormat("00");
     if(loadNoNumberPart + increase <= 99){
-      return loadNoCharPart + formatter.format(increasedLoadNoNumberPart);
+      String newLoad = loadNoCharPart + formatter.format(increasedLoadNoNumberPart);
+      LOGGER.info("New load with an increase of "+ increase +" is: " + newLoad);
+      return newLoad;
     }
     else {
       //if the incremented loadNo goes past 99
@@ -43,8 +46,9 @@ public class IncrementLoadNo {
           firstChar = (char) (firstChar + 1);
         }
       }
-      String result = String.valueOf(firstChar) + String.valueOf(secondChar) + overflowFixedIncVer;
-      return result;
+      String newLoad = String.valueOf(firstChar) + String.valueOf(secondChar) + overflowFixedIncVer;
+      LOGGER.info("New load with an increase of "+ increase +" is: " + newLoad);
+      return newLoad;
     }
   }
 }

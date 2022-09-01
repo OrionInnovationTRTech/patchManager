@@ -7,6 +7,7 @@ import org.patchmanager.maverickshhutils.ServerUser;
 import java.util.Scanner;
 
 import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
+import static org.patchmanager.services.CheckConnection.checkConnection;
 
 public class ServerCredentials {
   static Logger LOGGER = LogManager.getLogger(ServerCredentials.class);
@@ -22,7 +23,15 @@ public class ServerCredentials {
     ip = scanner.nextLine();
 
     System.out.print("Enter password: ");
-    password = scanner.nextLine();
-    return new ServerUser(username, ip, password);
+    password = String.valueOf(System.console().readPassword());
+    ServerUser newUser = new ServerUser(username, ip, password);
+
+    if (checkConnection(newUser)){
+      LOGGER.info("New user created");
+      return newUser;
+    }else{
+      LOGGER.info("Problem creating the user, enter credentials again");
+      return null;
+    }
   }
 }

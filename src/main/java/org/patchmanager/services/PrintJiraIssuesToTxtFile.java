@@ -45,10 +45,10 @@ public class PrintJiraIssuesToTxtFile {
 
     LOGGER.info("Jira Issue to Text Service Starting");
     LOGGER.info("Trying to authorize");
-    DotEnvUser dotEnvUserObj = new DotEnvUser();
+    new DotEnvUser();
 
 
-    if (!checkAuth(dotEnvUserObj.email, dotEnvUserObj.api)) {
+    if (!checkAuth(DotEnvUser.email, DotEnvUser.api)) {
       LOGGER.fatal("Couldn't authorize, check credentials");
       System.exit(-1);
     }
@@ -80,7 +80,6 @@ public class PrintJiraIssuesToTxtFile {
       writeToFile(finalStr.toString(), fileName);
     } else {
       LOGGER.fatal("No issues found with that label");
-      System.exit(-1);
     }
   }
 }

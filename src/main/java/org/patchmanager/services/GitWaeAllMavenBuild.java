@@ -20,7 +20,7 @@ public class GitWaeAllMavenBuild {
   static String gitBranch = "";
   static Logger LOGGER = LogManager.getLogger(GitWaeAllMavenBuild.class);
   public static void gitwaeallMavenBuild(ServerUser serverUser) {
-    LOGGER.info("Starting Service to take maven build");
+    LOGGER.info("Starting Service to take maven build in cdwae");
     System.out.println("Enter git branch to checkout to: ");
     Scanner scanner = new Scanner(System.in);
     gitBranch = scanner.nextLine();
@@ -31,7 +31,7 @@ public class GitWaeAllMavenBuild {
           ExpectShell shell = new ExpectShell(this);
           LOGGER.info("Sending gitwaeall");
           printCommandOutputLines(shell.executeCommand("gitwaeall"));
-          LOGGER.info("git checkout " + gitBranch);
+          LOGGER.info(String.format("git checkout %s", gitBranch));
           printCommandOutputLines(shell.executeCommand("git checkout " + gitBranch));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
@@ -43,8 +43,9 @@ public class GitWaeAllMavenBuild {
       });
     } catch (IOException e) {
       throw new RuntimeException(e);
-    } catch (SshException e) {
-      throw new RuntimeException(e);
+    }catch (SshException sshe) {
+      System.out.println("Problem with ssh connection");
+      LOGGER.fatal(sshe.getMessage());
     }
   }
 }
