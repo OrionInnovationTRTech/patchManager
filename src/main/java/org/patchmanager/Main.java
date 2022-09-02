@@ -195,4 +195,6 @@ public class Main {
   //fc yoksa ilk patch
   //--fc al
   //--userdan patch noyu al
+
+  //version alırken nasıl
 }

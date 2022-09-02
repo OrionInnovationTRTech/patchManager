@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 import static org.patchmanager.apiutils.AuthChecker.checkAuth;
 import static org.patchmanager.apiutils.ParseJiraIssues.parseJiraIssues;
-import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
+import static org.patchmanager.inputcheckers.PatchInputChecker.patchInputChecker;
+import static org.patchmanager.inputcheckers.VersionInputChecker.versionInputChecker;
 import static org.patchmanager.io.DecideFileName.fileNameDecider;
 import static org.patchmanager.io.WriteIntro.writeIntro;
 import static org.patchmanager.io.WriteOutro.writeOutro;

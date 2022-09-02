@@ -11,15 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.patchmanager.maverickshhutils.ServerUser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
-
-import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
-import static org.patchmanager.maverickshhutils.IncrementLoadNo.incrementLoadNo;
-import static org.patchmanager.maverickshhutils.NumberOfIssues.numberOfIssues;
 import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CheckFCExists {

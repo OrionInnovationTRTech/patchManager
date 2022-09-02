@@ -8,7 +8,6 @@ import static org.patchmanager.menu.DisplayMenu.displayMenu;
 import static org.patchmanager.menu.MainMenu.*;
 import static org.patchmanager.services.FileTransfer.fileTransfer;
 import static org.patchmanager.services.GitWaeAllMavenBuild.gitwaeallMavenBuild;
-import static org.patchmanager.services.MavenBuildAndPatchCreationSeq.mavenBuildAndPatchCreationSeq;
 import static org.patchmanager.services.PatchCreation.patchCreation;
 import static org.patchmanager.services.PseudoTerminal.pseudoTerminal;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
@@ -67,17 +66,9 @@ public class ZitsvyMenu {
             patchCreation(zitsvyUsr);
           }
           break;
-        case "7"://Maven Build and Patch Creation sequentially
-          if (zitsvyUsr == null) {
-            System.out.println("Enter your credentials with the first choice first");
-            break;
-          } else {
-            mavenBuildAndPatchCreationSeq(zitsvyUsr);
-          }
-          break;
-        case "8"://Return to main menu
+        case "7"://Return to main menu
           break zitsvyLoop;
-        case "9":
+        case "8":
           System.out.println("Terminating the program");
           System.exit(0);
           break;

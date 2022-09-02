@@ -6,7 +6,6 @@ import org.patchmanager.maverickshhutils.ServerUser;
 
 import java.util.Scanner;
 
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
 import static org.patchmanager.services.CheckConnection.checkConnection;
 
 public class ServerCredentials {

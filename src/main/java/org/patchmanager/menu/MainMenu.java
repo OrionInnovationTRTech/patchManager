@@ -18,8 +18,8 @@ import static org.patchmanager.services.TestNewService.testNewService;
 public class MainMenu {
   Logger LOGGER = LogManager.getLogger(MainMenu.class);
   static String[] mainMenuItems = {"1. Print Issues to Txt from Jira"
-      , "2. Services that uses the lab"
-      ,"3. Services that uses the zitsvy server"
+      , "2. Services that use the lab"
+      ,"3. Services that use the zitsvy server"
       ,"4. Testing service"
       ,"5. Exit"};
 
@@ -35,9 +35,8 @@ public class MainMenu {
       ,"4. Maven build in cdwae"
       ,"5. Maven Build in gitwaeall"
       ,"6. Patch Creation"
-      ,"7. Maven build and Patch Creation sequentially"
-      ,"8. Return to the main menu"
-      ,"9. Exit program"};
+      ,"7. Return to the main menu"
+      ,"8. Exit program"};
 
   static ServerUser labUsr = null;
   static ServerUser zitsvyUsr = null;
@@ -74,3 +73,6 @@ public class MainMenu {
 
     }
   }
+//medium
+//pr
+//menuyu gonder

@@ -9,13 +9,11 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.apiutils.DotEnvUser;
 import org.patchmanager.maverickshhutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
 import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class FileTransfer {
@@ -71,7 +69,7 @@ public class FileTransfer {
                   + destinationUsername + "@" + destinationIp + ":" + destinationPath));
           waitFor(1000);
           LOGGER.info("Sending the password of the source machine");
-          if(controller.expect("senas@10.254.51.215's password: ")){
+          if(controller.expect("senas@10.254.51.215's password:",false)){
             System.out.println("Enter password");
             controller.typeAndReturn(scanner.nextLine());
           }

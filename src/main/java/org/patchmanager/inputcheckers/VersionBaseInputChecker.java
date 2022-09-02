@@ -1,4 +1,4 @@
-package org.patchmanager.cli;
+package org.patchmanager.inputcheckers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

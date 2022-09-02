@@ -4,12 +4,11 @@ package org.patchmanager;
 import org.junit.jupiter.api.Test;
 import org.patchmanager.apiutils.DotEnvUser;
 import org.patchmanager.apiutils.HttpRequestAndResponse;
-import org.patchmanager.cli.OptionsRelated;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainTest {
-  OptionsRelated optionsRelatedObj = new OptionsRelated();
+
 
   @Test
   public void shouldReceive200StatusRecevied() {

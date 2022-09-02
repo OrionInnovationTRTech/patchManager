@@ -9,25 +9,26 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.patchmanager.maverickshhutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.cli.PatchInputChecker.patchInputChecker;
-import static org.patchmanager.cli.VersionInputChecker.versionInputChecker;
-import static org.patchmanager.maverickshhutils.IncrementLoadNo.incrementLoadNo;
+import static org.patchmanager.inputcheckers.PatchInputChecker.patchInputChecker;
+import static org.patchmanager.inputcheckers.VersionBaseInputChecker.versionBaseInputChecker;
+import static org.patchmanager.maverickshhutils.GetFCLoadNumber.getFcLoadNumber;
 import static org.patchmanager.maverickshhutils.NumberOfIssues.numberOfIssues;
 import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
 import static org.patchmanager.services.CheckFCExists.checkFCExists;
-import static org.patchmanager.services.LoadNumberInputChecker.loadNumberInputChecker;
+import static org.patchmanager.services.CreateFC.createFC;
+import static org.patchmanager.services.CreatePatch.createPatch;
+import static org.patchmanager.inputcheckers.LoadNumberInputChecker.loadNumberInputChecker;
 
 public class PatchCreation {
   static Logger LOGGER = LogManager.getLogger(PatchCreation.class);
   static String gitBranch = "";
   static String labelInput = "";
-  static String versionInput = "";
+  static String versionBaseInput = "";
   static String patchInput = "";
   //get the numbers
   //get the patch no
@@ -42,11 +43,11 @@ public class PatchCreation {
     System.out.print("Enter the label: ");
     labelInput = scanner.nextLine();
 
-    System.out.print("Enter the version in the form of 9.8.1.dm10: ");
-    versionInput = scanner.nextLine();
-    while(!versionInputChecker(versionInput)){
+    System.out.print("Enter the version in the form of 9.8.1: ");
+    versionBaseInput = scanner.nextLine();
+    while(!versionBaseInputChecker(versionBaseInput)){
       System.out.print("Wrong version format, enter again: ");
-      versionInput = scanner.nextLine();
+      versionBaseInput = scanner.nextLine();
     }
 
     System.out.print("Enter the patch in the form of an integer: ");
@@ -56,12 +57,6 @@ public class PatchCreation {
       patchInput = scanner.nextLine();
     }
 
-    int noOfIssues = numberOfIssues(labelInput);
-
-    String[] splitVersionByDot = versionInput.split("\\.");
-    String loadNo = splitVersionByDot[3];
-    String versionHigher = String.join(".", splitVersionByDot[0], splitVersionByDot[1], splitVersionByDot[2]);
-    String increasedLoadNo = incrementLoadNo(loadNo, noOfIssues);
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
@@ -71,74 +66,80 @@ public class PatchCreation {
           printCommandOutputLines(shell.executeCommand("git checkout " + gitBranch));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
-          String fc = checkFCExists(serverUser, versionHigher);
+
+          String fc = checkFCExists(serverUser, versionBaseInput);
           //if first patch
           if (patchInput.equals("1")) {
-
             //if there is no fc file and first patch
             if (fc.equals("-1")) {
+              LOGGER.info("No FC file found");
               System.out.print("Please enter the load number of the FC file");
               String loadNumberOfFcForCreation = scanner.nextLine();
-              LOGGER.info("Changing aa01 in pom.xml to: " + loadNumberOfFcForCreation);
-              printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/"+ loadNumberOfFcForCreation +"/' ../pom.xml"));
-              LOGGER.info("Running FC script");
-              ShellProcess fcProcess;
-              printCommandOutputLines(fcProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m FC"));
-              LOGGER.info("FC script process ended with exit code: " + fcProcess.getExitCode());
+              while(!loadNumberInputChecker(loadNumberOfFcForCreation)){
+                System.out.print("Load number invalid enter again: ");
+                loadNumberOfFcForCreation = scanner.nextLine();
+              }
+              ShellProcess fcProcess = createFC(shell,loadNumberOfFcForCreation,scanner);
               LOGGER.info("Getting number of issues");
               int numberOfIssues = numberOfIssues(labelInput);
-              String increasedLoad = incrementLoadNo(loadNumberOfFcForCreation ,numberOfIssues);
-              LOGGER.info("Changing "+ loadNumberOfFcForCreation +" in pom.xml to: " + increasedLoad);
-              printCommandOutputLines(shell.executeCommand("sed -i.bak 's/"+loadNumberOfFcForCreation+"/"+ increasedLoad +"/' ../pom.xml"));
-              LOGGER.info("Running patch script");
-              ShellProcess patchProcess;
-              printCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p "+ "1" +" -c FC_"+ versionHigher +"."+ loadNumberOfFcForCreation +"_Checksums.txt"));
+              ShellProcess patchProcess = createPatch(shell, loadNumberOfFcForCreation,
+                  numberOfIssues, loadNumberOfFcForCreation, versionBaseInput, patchInput, loadNumberOfFcForCreation);
               LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
               LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+              //script adi degisebilir
             }
-            //if there is fc file and first patch
+            //if there is fc file and it is the first patch
             else {
               String fcLoadNumber = getFcLoadNumber(fc);
               LOGGER.info("Load number of FC is "+ fcLoadNumber);
               LOGGER.info("Getting number of issues");
               int numberOfIssues = numberOfIssues(labelInput);
-              String increasedLoad = incrementLoadNo(fcLoadNumber ,numberOfIssues);
-              LOGGER.info("FC load number was "+ fcLoadNumber);
-              LOGGER.info("Number of issues with the patch label is " +numberOfIssues);
-              LOGGER.info("Load number of patch 1 will be "+ increasedLoad);
-              LOGGER.info("Changing "+ "aa01" +" in pom.xml to: " + increasedLoad);
-              printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/"+ increasedLoad +"/' ../pom.xml"));
-              LOGGER.info("Running patch script");
-              ShellProcess patchProcess;
-              printCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p "+ "1" +" -c FC_"+ versionHigher +"."+ fcLoadNumber +"_Checksums.txt"));
+
+              ShellProcess patchProcess = createPatch(shell, fcLoadNumber,
+                  numberOfIssues, fcLoadNumber, versionBaseInput, patchInput,"aa01");
               LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
             }
-          //if it is not the first patch, also means that there is also an fc file
+          //If it is not the first patch
           }else {
-            String fcLoadNumber = getFcLoadNumber(fc);
-            LOGGER.info("Load number of FC is "+ fcLoadNumber);
-            LOGGER.info("Getting number of issues");
-            int numberOfIssues = numberOfIssues(labelInput);
+            //if it is not the first patch and there is no fc file
+            if (fc.equals("-1")){
+              LOGGER.info("No FC file found");
+              System.out.print("Please enter the load number of the FC file");
+              String loadNumberOfFcForCreation = scanner.nextLine();
+              while(!loadNumberInputChecker(loadNumberOfFcForCreation)){
+                System.out.print("Load number invalid enter again: ");
+                loadNumberOfFcForCreation = scanner.nextLine();
+              }
+              ShellProcess fcProcess = createFC(shell,loadNumberOfFcForCreation,scanner);
+              LOGGER.info("Getting number of issues");
+              int numberOfIssues = numberOfIssues(labelInput);
+              System.out.println("Please enter the load number of the previous patch " + (Integer.parseInt(patchInput) - 1) + " e.g. dm74 for the previous patch");
+              String loadNumberOfPreviousPatch = scanner.nextLine();
+              while (!loadNumberInputChecker(loadNumberOfPreviousPatch)) {
+                System.out.print("Wrong load number format, enter again: ");
+                loadNumberOfPreviousPatch = scanner.nextLine();
+              }
+              ShellProcess patchProcess = createPatch(shell, loadNumberOfPreviousPatch,
+                  numberOfIssues, loadNumberOfFcForCreation, versionBaseInput, patchInput,loadNumberOfFcForCreation);
+              LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
+              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+              //if it is not the first patch and there is a fc file
+            }else {
+              String fcLoadNumber = getFcLoadNumber(fc);
+              LOGGER.info("Load number of FC is " + fcLoadNumber);
+              LOGGER.info("Getting number of issues");
+              int numberOfIssues = numberOfIssues(labelInput);
 
-            System.out.println("Please enter the load number of the patch "+ (Integer.parseInt(patchInput) - 1) + " e.g. dm74");
-            String loadNumberOfPreviousPatch = scanner.nextLine();
-
-            while(!loadNumberInputChecker(loadNumberOfPreviousPatch)){
-              System.out.print("Wrong load number format, enter again: ");
-              loadNumberOfPreviousPatch = scanner.nextLine();
+              System.out.println("Please enter the load number of the previous patch " + (Integer.parseInt(patchInput) - 1) + " e.g. dm74 for the previous patch");
+              String loadNumberOfPreviousPatch = scanner.nextLine();
+              while (!loadNumberInputChecker(loadNumberOfPreviousPatch)) {
+                System.out.print("Wrong load number format, enter again: ");
+                loadNumberOfPreviousPatch = scanner.nextLine();
+              }
+              ShellProcess patchProcess = createPatch(shell, loadNumberOfPreviousPatch,
+              numberOfIssues, fcLoadNumber, versionBaseInput, patchInput, "aa01");
+              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
             }
-
-            String increasedLoad = incrementLoadNo(loadNumberOfPreviousPatch ,numberOfIssues);
-            LOGGER.info("FC load number was "+ fcLoadNumber);
-            LOGGER.info("Number of issues of the previous patch is " +loadNumberOfPreviousPatch);
-            LOGGER.info("Number of issues with the patch label is " +numberOfIssues);
-            LOGGER.info("Load number of patch "+patchInput+" will be "+ increasedLoad);
-            LOGGER.info("Changing "+ "aa01" +" in pom.xml to: " + increasedLoad);
-            printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/"+ increasedLoad +"/' ../pom.xml"));
-            LOGGER.info("Running patch script");
-            ShellProcess patchProcess;
-            printCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p "+ patchInput +" -c FC_"+ versionHigher +"."+ fcLoadNumber +"_Checksums.txt"));
-            LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
           }
         }
       });
@@ -147,14 +148,6 @@ public class PatchCreation {
       LOGGER.fatal(sshe.getMessage());
     }
   }
-
-  @NotNull
-  private static String getFcLoadNumber(String fc) {
-    //FC_9.8.1.dm64_Checksums.txt to FC,9.8.1.dm64,Checksums.txt
-    String[] fcSplitted = fc.split("_");
-    LOGGER.info("The fc version is "+ fcSplitted[1]);
-    //9.8.1.dm64 to just get the last 4 things
-    String fcLoadNumber = fcSplitted[1].substring(fcSplitted[1].length() - 4);
-    return fcLoadNumber;
-  }
+  //konsol logu
+  //fc kontrolü?
 }
