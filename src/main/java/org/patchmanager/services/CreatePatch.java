@@ -7,10 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.IncrementLoadNo.incrementLoadNo;
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.CheckIfGreaterThan981.checkIfGreaterThan981;
+import static org.patchmanager.mavericksshutils.IncrementLoadNo.incrementLoadNo;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.charPrintCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CreatePatch {
   static Logger LOGGER = LogManager.getLogger(CreatePatch.class);
@@ -42,7 +43,13 @@ public class CreatePatch {
     printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
     LOGGER.info("Running patch script");
     ShellProcess patchProcess;
-    printCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p " + patchInput + " -c FC_" + versionBaseInput + "." + fcLoadNumber + "_Checksums.txt"));
+    if (checkIfGreaterThan981(versionBaseInput)){
+      //run using genKLPatch.sh
+      charPrintCommandOutputLines(patchProcess = shell.executeCommand("../patch/genKLPatch.sh -m PATCH -p " + patchInput + " -c FC_" + versionBaseInput + "." + fcLoadNumber + "_Checksums.txt"));
+    }else {
+      //run using genSpidrPatch.sh
+      charPrintCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p " + patchInput + " -c FC_" + versionBaseInput + "." + fcLoadNumber + "_Checksums.txt"));
+    }
     LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
     return patchProcess;
   }

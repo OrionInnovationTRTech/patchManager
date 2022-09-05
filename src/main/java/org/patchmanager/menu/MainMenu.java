@@ -3,8 +3,7 @@ package org.patchmanager.menu;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.jmx.Server;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,27 +16,25 @@ import static org.patchmanager.services.TestNewService.testNewService;
 
 public class MainMenu {
   Logger LOGGER = LogManager.getLogger(MainMenu.class);
-  static String[] mainMenuItems = {"1. Print Issues to Txt from Jira"
-      , "2. Services that use the lab"
-      ,"3. Services that use the zitsvy server"
-      ,"4. Testing service"
-      ,"5. Exit"};
+  static String[] mainMenuItems = {"1. Creation of admin.txt file"
+      , "2. Run commands in lab"
+      , "3. Go to Zitsvy Menu"
+      , "4. Exit"};
 
   static String[] labMenuItems = {"1. Enter lab credentials"
-      ,"2. Pseudo terminal"
+      ,"2. Run command on lab server"
       ,"3. Check connection"
       ,"4. Return to the main menu"
       ,"5. Exit program"};
 
   static String[] zitsvyMenuItems = {"1. Enter zitsvy credentials"
-      ,"2. Pseudo terminal"
+      ,"2. Run command on zitsvy server"
       ,"3. File transfer"
-      ,"4. Maven build in cdwae"
-      ,"5. Maven Build in gitwaeall"
+      ,"4. Maven Build in gitwaeall"
+      ,"5. FC Creation"
       ,"6. Patch Creation"
       ,"7. Return to the main menu"
       ,"8. Exit program"};
-
   static ServerUser labUsr = null;
   static ServerUser zitsvyUsr = null;
   static Scanner scanner = new Scanner(System.in);
@@ -59,11 +56,6 @@ public class MainMenu {
           zitsvyMenu();
           break;
         case "4":
-          ServerUser zitsvyUser = new ServerUser("senas", "10.254.51.215", "KandyAVCT1");
-          ServerUser labUser = new ServerUser("ntsysadm", "47.168.150.36", "RAPtor1234");
-          testNewService(zitsvyUser);
-          break;
-        case "5":
           System.out.println("Terminating");
           break mainLoop;
         default:
@@ -76,3 +68,5 @@ public class MainMenu {
 //medium
 //pr
 //menuyu gonder
+//4.8.1 genspider
+//4.9 ve üzeri başka

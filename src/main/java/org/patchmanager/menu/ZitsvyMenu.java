@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import static org.patchmanager.menu.DisplayMenu.displayMenu;
 import static org.patchmanager.menu.MainMenu.*;
+import static org.patchmanager.services.FCCreation.fcCreation;
 import static org.patchmanager.services.FileTransfer.fileTransfer;
 import static org.patchmanager.services.GitWaeAllMavenBuild.gitwaeallMavenBuild;
 import static org.patchmanager.services.PatchCreation.patchCreation;
@@ -26,7 +27,7 @@ public class ZitsvyMenu {
         case "1"://Enter lab credentials
           zitsvyUsr = serverUserCredentials();
           break;
-        case "2"://Pseudoterminal
+        case "2"://Pseudoterminal, run commands on zitsvy server
           if (zitsvyUsr == null) {
             System.out.println("Enter your credentials with the first choice first");
             break;
@@ -42,20 +43,20 @@ public class ZitsvyMenu {
             fileTransfer(zitsvyUsr);
           }
           break;
-        case "4"://Maven build in cdwae
-          if (zitsvyUsr == null) {
-            System.out.println("Enter your credentials with the first choice first");
-            break;
-          } else {
-            waeAdminResWarMavenBuild(zitsvyUsr);
-          }
-          break;
-        case "5"://Maven Build in gitwaeall
+        case "4"://Maven Build in gitwaeall
           if (zitsvyUsr == null) {
             System.out.println("Enter your credentials with the first choice first");
             break;
           } else {
             gitwaeallMavenBuild(zitsvyUsr);
+          }
+          break;
+        case "5"://FC Creation
+          if (zitsvyUsr == null) {
+            System.out.println("Enter your credentials with the first choice first");
+            break;
+          } else {
+            fcCreation(zitsvyUsr);
           }
           break;
         case "6"://Patch Creation

@@ -14,8 +14,8 @@ import org.patchmanager.mavericksshutils.ServerUser;
 import java.io.IOException;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
-public class CheckFCExists {
-  static Logger LOGGER = LogManager.getLogger(CheckFCExists.class);
+public class CheckMultipleFCsExist {
+  static Logger LOGGER = LogManager.getLogger(CheckMultipleFCsExist.class);
 
   /**
    * Checks if fc file exists in patch directory, does it by searching in ls FC_versionHigher e.g. FC_9.8.1
@@ -25,8 +25,8 @@ public class CheckFCExists {
    * @throws IOException
    * @throws SshException
    */
-  public static String checkFCExists(ServerUser serverUser, String versionHigher) throws IOException, SshException {
-    final String[] nameOfFC = {"-1"};
+  public static String checkMultipleFCsExist(ServerUser serverUser, String versionHigher) throws IOException {
+    final String[] nameOfFC = {"-1" , "-1"};
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
@@ -42,19 +42,30 @@ public class CheckFCExists {
           //finish the process
           process.drain();
           String line = process.getCommandOutput();
-          int startingIndexOfFC = line.indexOf("FC_"+versionHigher);
-          int endingIndexOfFC;
+          int startingIndexOfFC1 = line.indexOf("FC_"+versionHigher);
+          int endingIndexOfFC1 = -1;
 
-          if (startingIndexOfFC != -1){
-            endingIndexOfFC = line.indexOf(" ", startingIndexOfFC);
-            nameOfFC[0] = line.substring(startingIndexOfFC,endingIndexOfFC);
+          if (startingIndexOfFC1 != -1){
+            endingIndexOfFC1 = line.indexOf(" ", startingIndexOfFC1);
+            nameOfFC[0] = line.substring(startingIndexOfFC1,endingIndexOfFC1);
           }
+
+          int startingIndexOfFC2 = line.indexOf("FC_"+versionHigher, endingIndexOfFC1);
+          int endingIndexOfFC2 = -1;
+
+          if (startingIndexOfFC2 != -1){
+            endingIndexOfFC2 = line.indexOf(" ", startingIndexOfFC2);
+            nameOfFC[1] = line.substring(startingIndexOfFC2,endingIndexOfFC2);
+          }
+
+
         }
       });
     }catch (SshException sshe) {
       System.out.println("Problem with ssh connection");
       LOGGER.fatal(sshe.getMessage());
     }
-    return nameOfFC[0];
+    //name of second fc file
+    return nameOfFC[1];
   }
 }

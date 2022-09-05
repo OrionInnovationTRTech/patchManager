@@ -3,19 +3,17 @@ package org.patchmanager.services;
 import com.sshtools.client.SessionChannelNG;
 import com.sshtools.client.SshClient;
 import com.sshtools.client.shell.ExpectShell;
-import com.sshtools.client.shell.ShellProcess;
 import com.sshtools.client.shell.ShellTimeoutException;
 import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.nio.channels.UnresolvedAddressException;
-import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CheckConnection {
   static Logger LOGGER = LogManager.getLogger(CheckConnection.class);

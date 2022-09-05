@@ -9,12 +9,13 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class FileTransfer {
   static String sourcePath = "";
@@ -31,34 +32,30 @@ public class FileTransfer {
   public static void fileTransfer(ServerUser serverUser) throws IOException, SshException {
     LOGGER.info("File transfer service started");
     Scanner scanner = new Scanner(System.in);
+    ServerUser destinationUser = null;
+    while(destinationUser == null){
+      System.out.println("Enter the info of the destination server");
+      destinationUser = serverUserCredentials();
+    }
+
+    System.out.print("Enter the path of the source file (put / at the beginning): ");
+    sourcePath = scanner.nextLine();
+
+    System.out.print("Enter the path of the destination directory(put / at the beginning): ");
+    destinationPath = scanner.nextLine();
 
 
     sourceIp = serverUser.getIp();
     sourcePassword = serverUser.getPassword();
     sourceUsername = serverUser.getUsername();
-
-    System.out.print("Enter the path of the file that is going to be transferred: ");
-    sourcePath = scanner.nextLine();
-
-    System.out.print("Enter the username of destination machine: ");
-    destinationUsername = scanner.nextLine();
-
-    System.out.print("Enter the ip of destination machine: ");
-    destinationIp = scanner.nextLine();
-
-    System.out.print("Enter the password of destination machine: ");
-    destinationPassword = String.valueOf(System.console().readPassword());
-
-    System.out.print("Enter the file path of destination machine that the file is going to be transferred to: ");
-    destinationPath = scanner.nextLine();
+    //sourcePath = "/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war";
+    destinationUsername = destinationUser.getUsername();
+    destinationIp = destinationUser.getIp();
+    //destinationPath = "/tmp";
+    destinationPassword = destinationUser.getPassword();
 
 
-    //scp senas@10.254.51.215:/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war ntsysadm@47.168.150.36:/tmp/
-    sourcePath = "/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war";
-    destinationUsername = "ntsysadm";
-    destinationIp = "47.168.150.36";
-    destinationPath = "/tmp";
-    destinationPassword = "RAPtor1234";
+
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
@@ -69,10 +66,6 @@ public class FileTransfer {
                   + destinationUsername + "@" + destinationIp + ":" + destinationPath));
           waitFor(1000);
           LOGGER.info("Sending the password of the source machine");
-          if(controller.expect("senas@10.254.51.215's password:",false)){
-            System.out.println("Enter password");
-            controller.typeAndReturn(scanner.nextLine());
-          }
           controller.typeAndReturn(sourcePassword);
           waitFor(1000);
           LOGGER.info("Sending the password of the remote machine");

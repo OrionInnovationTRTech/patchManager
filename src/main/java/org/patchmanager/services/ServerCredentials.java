@@ -2,7 +2,7 @@ package org.patchmanager.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.util.Scanner;
 

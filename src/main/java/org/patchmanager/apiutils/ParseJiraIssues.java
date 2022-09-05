@@ -10,7 +10,6 @@ public class ParseJiraIssues {
 
   /**
    * Returns all issues in ABE-123 Description form line by line
-   *
    * @param responseBody takes the response body after GET for issues with label
    * @return string value
    */

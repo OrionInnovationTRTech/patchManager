@@ -9,17 +9,18 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 import static org.patchmanager.inputcheckers.PatchInputChecker.patchInputChecker;
 import static org.patchmanager.inputcheckers.VersionBaseInputChecker.versionBaseInputChecker;
-import static org.patchmanager.maverickshhutils.GetFCLoadNumber.getFcLoadNumber;
-import static org.patchmanager.maverickshhutils.NumberOfIssues.numberOfIssues;
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.GetFCLoadNumber.getFcLoadNumber;
+import static org.patchmanager.mavericksshutils.NumberOfIssues.numberOfIssues;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 import static org.patchmanager.services.CheckFCExists.checkFCExists;
+import static org.patchmanager.services.CheckMultipleFCsExist.checkMultipleFCsExist;
 import static org.patchmanager.services.CreateFC.createFC;
 import static org.patchmanager.services.CreatePatch.createPatch;
 import static org.patchmanager.inputcheckers.LoadNumberInputChecker.loadNumberInputChecker;
@@ -30,9 +31,6 @@ public class PatchCreation {
   static String labelInput = "";
   static String versionBaseInput = "";
   static String patchInput = "";
-  //get the numbers
-  //get the patch no
-  // get version
   public static void patchCreation(ServerUser serverUser) throws IOException, SshException {
 
     Scanner scanner = new Scanner(System.in);
@@ -66,27 +64,19 @@ public class PatchCreation {
           printCommandOutputLines(shell.executeCommand("git checkout " + gitBranch));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
+          String secondFc = checkMultipleFCsExist(serverUser,versionBaseInput);
+          if (secondFc != "-1"){
+            LOGGER.fatal("There are multiple FC files found, terminating");
+            System.exit(-1);
+          }
 
           String fc = checkFCExists(serverUser, versionBaseInput);
           //if first patch
           if (patchInput.equals("1")) {
             //if there is no fc file and first patch
             if (fc.equals("-1")) {
-              LOGGER.info("No FC file found");
-              System.out.print("Please enter the load number of the FC file");
-              String loadNumberOfFcForCreation = scanner.nextLine();
-              while(!loadNumberInputChecker(loadNumberOfFcForCreation)){
-                System.out.print("Load number invalid enter again: ");
-                loadNumberOfFcForCreation = scanner.nextLine();
-              }
-              ShellProcess fcProcess = createFC(shell,loadNumberOfFcForCreation,scanner);
-              LOGGER.info("Getting number of issues");
-              int numberOfIssues = numberOfIssues(labelInput);
-              ShellProcess patchProcess = createPatch(shell, loadNumberOfFcForCreation,
-                  numberOfIssues, loadNumberOfFcForCreation, versionBaseInput, patchInput, loadNumberOfFcForCreation);
-              LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
-              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
-              //script adi degisebilir
+              LOGGER.fatal("No FC file found while trying create a patch");
+              System.exit(-1);
             }
             //if there is fc file and it is the first patch
             else {
@@ -103,26 +93,8 @@ public class PatchCreation {
           }else {
             //if it is not the first patch and there is no fc file
             if (fc.equals("-1")){
-              LOGGER.info("No FC file found");
-              System.out.print("Please enter the load number of the FC file");
-              String loadNumberOfFcForCreation = scanner.nextLine();
-              while(!loadNumberInputChecker(loadNumberOfFcForCreation)){
-                System.out.print("Load number invalid enter again: ");
-                loadNumberOfFcForCreation = scanner.nextLine();
-              }
-              ShellProcess fcProcess = createFC(shell,loadNumberOfFcForCreation,scanner);
-              LOGGER.info("Getting number of issues");
-              int numberOfIssues = numberOfIssues(labelInput);
-              System.out.println("Please enter the load number of the previous patch " + (Integer.parseInt(patchInput) - 1) + " e.g. dm74 for the previous patch");
-              String loadNumberOfPreviousPatch = scanner.nextLine();
-              while (!loadNumberInputChecker(loadNumberOfPreviousPatch)) {
-                System.out.print("Wrong load number format, enter again: ");
-                loadNumberOfPreviousPatch = scanner.nextLine();
-              }
-              ShellProcess patchProcess = createPatch(shell, loadNumberOfPreviousPatch,
-                  numberOfIssues, loadNumberOfFcForCreation, versionBaseInput, patchInput,loadNumberOfFcForCreation);
-              LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
-              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+              LOGGER.fatal("No FC file found while trying create a patch");
+              System.exit(-1);
               //if it is not the first patch and there is a fc file
             }else {
               String fcLoadNumber = getFcLoadNumber(fc);
@@ -148,6 +120,4 @@ public class PatchCreation {
       LOGGER.fatal(sshe.getMessage());
     }
   }
-  //konsol logu
-  //fc kontrolü?
 }

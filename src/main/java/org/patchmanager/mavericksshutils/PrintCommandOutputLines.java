@@ -1,4 +1,4 @@
-package org.patchmanager.maverickshhutils;
+package org.patchmanager.mavericksshutils;
 
 import com.sshtools.client.shell.ShellProcess;
 import com.sshtools.client.shell.ShellProcessController;
@@ -29,5 +29,17 @@ public class PrintCommandOutputLines {
     }
     controller.getProcess().drain();
     System.out.println(controller.getProcess().getCommandOutput());
+  }
+
+  /**
+   * prints char by char instead of line by line to to make sure dots in analyzing pom file is printed on screen
+   * @param process
+   * @throws IOException
+   */
+  public static void charPrintCommandOutputLines(ShellProcess process) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    while(process.isActive()) {
+      System.out.print((char)reader.read());
+    }
   }
 }

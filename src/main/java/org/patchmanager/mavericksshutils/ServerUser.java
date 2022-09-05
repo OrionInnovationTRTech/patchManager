@@ -1,4 +1,4 @@
-package org.patchmanager.maverickshhutils;
+package org.patchmanager.mavericksshutils;
 
 public class ServerUser {
   private String username = "";

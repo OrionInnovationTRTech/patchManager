@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CreateFC {
   static Logger LOGGER = LogManager.getLogger(CreateFC.class);

@@ -1,4 +1,4 @@
-package org.patchmanager.maverickshhutils;
+package org.patchmanager.mavericksshutils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

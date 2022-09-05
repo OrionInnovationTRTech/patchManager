@@ -24,7 +24,7 @@ public class LabMenu {
         case "1"://Enter lab credentials
           labUsr = serverUserCredentials();
           break;
-        case "2"://Pseudoterminal
+        case "2"://Pseudoterminal, run commands on lab
           if (labUsr == null) {
             System.out.println("Enter your credentials with the first choice first");
             break;

@@ -9,12 +9,12 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class GitWaeAllMavenBuild {
   static String gitBranch = "";

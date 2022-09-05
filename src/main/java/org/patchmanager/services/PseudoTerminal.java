@@ -7,16 +7,21 @@ import com.sshtools.client.tasks.ShellTask;
 import com.sshtools.common.ssh.SshException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.patchmanager.apiutils.DotEnvUser;
-import org.patchmanager.maverickshhutils.ServerUser;
+import org.patchmanager.mavericksshutils.ServerUser;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.maverickshhutils.PrintCommandOutputLines.printCommandOutputLines;
+import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class PseudoTerminal {
   static Logger LOGGER = LogManager.getLogger(PseudoTerminal.class);
+
+  /**
+   * Pseudoterminal that can run simple commands like ls or pwd
+   * @param serverUser
+   * @throws IOException
+   */
   public static void pseudoTerminal(ServerUser serverUser) throws IOException {
     Scanner scanner = new Scanner(System.in);
     LOGGER.info("Starting pseudoterminal service");
