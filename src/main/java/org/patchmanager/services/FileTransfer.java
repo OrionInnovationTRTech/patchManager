@@ -14,7 +14,6 @@ import org.patchmanager.mavericksshutils.ServerUser;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class FileTransfer {
@@ -27,7 +26,6 @@ public class FileTransfer {
   static String destinationIp = "";
   static String destinationUsername = "";
   static String destinationPassword = "";
-  static String sourceOrDestinationMachine = "";
   static Logger LOGGER = LogManager.getLogger(FileTransfer.class);
   public static void fileTransfer(ServerUser serverUser) throws IOException, SshException {
     LOGGER.info("File transfer service started");
@@ -48,10 +46,8 @@ public class FileTransfer {
     sourceIp = serverUser.getIp();
     sourcePassword = serverUser.getPassword();
     sourceUsername = serverUser.getUsername();
-    //sourcePath = "/export/viewstore/disk24/mcs/wam/gitstorage/senas/Kandy_Link/wae/base/modules/webapps/wae-admin-rest-war/target/wae-admin-rest-war-9.8.1.war";
     destinationUsername = destinationUser.getUsername();
     destinationIp = destinationUser.getIp();
-    //destinationPath = "/tmp";
     destinationPassword = destinationUser.getPassword();
 
 

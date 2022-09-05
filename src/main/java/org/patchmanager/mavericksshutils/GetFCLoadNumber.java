@@ -16,7 +16,6 @@ public class GetFCLoadNumber {
     String[] fcSplitted = fc.split("_");
     LOGGER.info("The fc version is "+ fcSplitted[1]);
     //9.8.1.dm64 to just get the last 4 things
-    String fcLoadNumber = fcSplitted[1].substring(fcSplitted[1].length() - 4);
-    return fcLoadNumber;
+    return fcSplitted[1].substring(fcSplitted[1].length() - 4);
   }
 }

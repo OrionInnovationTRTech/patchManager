@@ -12,7 +12,6 @@ public class EncodeBase64 {
     LOGGER.debug("Encoding the email and api");
     String wantedPlainString = email + ":" + api;
     String encodedString = Base64.getEncoder().encodeToString(wantedPlainString.getBytes());
-    String wantedFinalString = "Basic " + encodedString;
-    return wantedFinalString;
+    return "Basic " + encodedString;
   }
 }

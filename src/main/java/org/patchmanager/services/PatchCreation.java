@@ -21,7 +21,6 @@ import static org.patchmanager.mavericksshutils.NumberOfIssues.numberOfIssues;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 import static org.patchmanager.services.CheckFCExists.checkFCExists;
 import static org.patchmanager.services.CheckMultipleFCsExist.checkMultipleFCsExist;
-import static org.patchmanager.services.CreateFC.createFC;
 import static org.patchmanager.services.CreatePatch.createPatch;
 import static org.patchmanager.inputcheckers.LoadNumberInputChecker.loadNumberInputChecker;
 

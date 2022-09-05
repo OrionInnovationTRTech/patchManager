@@ -54,9 +54,7 @@ public class FCCreation {
           printCommandOutputLines(shell.executeCommand("git pull"));
 
           String fc = checkFCExists(serverUser, versionBaseInput);
-
-
-          //if there is no fc file and first patch
+          //if there is no fc file
           if (fc.equals("-1")) {
             LOGGER.info("No FC file found");
             System.out.print("Please enter the load number of the FC file");
@@ -74,7 +72,7 @@ public class FCCreation {
               charPrintCommandOutputLines(fcProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m FC"));
             }
             LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
-            //if there is fc file and it is the first patch
+            //if there is fc file
           }else{
             LOGGER.fatal("There already is a FC file " + fc);
           }

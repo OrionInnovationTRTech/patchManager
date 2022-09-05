@@ -19,10 +19,7 @@ public class PatchInputChecker {
     //Regex is in the form of number
     Pattern patternPatch = Pattern.compile("\\d+");
     Matcher matcherPatch = patternPatch.matcher(patch);
-    if (!matcherPatch.matches()) {
-      return false;
-    }
-    return true;
+    return matcherPatch.matches();
 
   }
 }

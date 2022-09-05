@@ -19,10 +19,7 @@ public class VersionBaseInputChecker {
     Pattern patternVersion = Pattern.compile("\\d+.\\d+.\\d+");
     Matcher matcherVersion = patternVersion.matcher(baseVersion);
 
-    if (!matcherVersion.matches()) {
-      return false;
-    }
-    return true;
+    return matcherVersion.matches();
 
   }
 }

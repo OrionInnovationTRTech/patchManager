@@ -50,7 +50,7 @@ public class CreatePatch {
       //run using genSpidrPatch.sh
       charPrintCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p " + patchInput + " -c FC_" + versionBaseInput + "." + fcLoadNumber + "_Checksums.txt"));
     }
-    LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+    LOGGER.info("Patch script process ended with exit code: {}", patchProcess.getExitCode());
     return patchProcess;
   }
 }

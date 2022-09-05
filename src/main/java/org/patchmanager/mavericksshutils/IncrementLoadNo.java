@@ -19,7 +19,7 @@ public class IncrementLoadNo {
    * @return
    */
   public static String incrementLoadNo(String loadNo, int increase){
-    LOGGER.info("Starting load is: "+loadNo);
+    LOGGER.info("Starting load is: {}",loadNo);
     int loadNoNumberPart = parseInt(loadNo.substring(2));
     String loadNoCharPart = loadNo.substring(0,2);
     int increasedLoadNoNumberPart = loadNoNumberPart + increase;

@@ -8,9 +8,8 @@ public class WriteOutro {
 
   public static String writeOutro(String patch, String versionHigher) {
     LOGGER.debug("Creating the string for the outro(after issues) part");
-    String outro = "\n" +
+    return "\n" +
         "END DETAILED_DESCRIPTION\n" +
-        "KANDYLINK_" + versionHigher + "_P_" + patch + ".tar.gz\n\n";
-    return outro;
+            "KANDYLINK_" + versionHigher + "_P_" + patch + ".tar.gz\n\n";
   }
 }
