@@ -31,12 +31,9 @@ public class LabMenu {
             pseudoTerminal(labUsr);
           }
           break;
-        case "3"://Check connection
-          checkConnection(labUsr);
-          break;
-        case "4"://Return to main menu
+        case "3"://Return to main menu
           break labLoop;
-        case "5":
+        case "4":
           System.out.println("Terminating the program");
           System.exit(0);
           break;

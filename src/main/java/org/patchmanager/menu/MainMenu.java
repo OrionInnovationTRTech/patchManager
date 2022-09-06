@@ -22,9 +22,8 @@ public class MainMenu {
 
   static final String[] LAB_MENU_ITEMS = {"1. Enter lab credentials"
       ,"2. Run command on lab server"
-      ,"3. Check connection"
-      ,"4. Return to the main menu"
-      ,"5. Exit program"};
+      ,"3. Return to the main menu"
+      ,"4. Exit program"};
 
   static final String[] ZITSVY_MENU_ITEMS = {"1. Enter zitsvy credentials"
       ,"2. Run command on zitsvy server"

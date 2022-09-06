@@ -63,6 +63,12 @@ public class FCCreation {
               System.out.print("Load number invalid enter again: ");
               loadNumberOfFcForCreation = scanner.nextLine();
             }
+
+            printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/" + loadNumberOfFcForCreation + "/' ../pom.xml"));
+            LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
+            printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
+
+
             ShellProcess fcProcess;
             if (checkIfGreaterThan981(versionBaseInput)) {
               //run using genKLPatch.sh
