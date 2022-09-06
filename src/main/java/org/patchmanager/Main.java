@@ -31,7 +31,7 @@ public class Main {
     LOGGER.info("Finishing the main function");
     long finish = System.currentTimeMillis();
     double timeElapsed = finish - start;
-    System.out.println(timeElapsed/1000);
-    System.out.println("seconds passed");
+    System.out.print(timeElapsed/1000);
+    System.out.println(" seconds have passed");
   }
 }

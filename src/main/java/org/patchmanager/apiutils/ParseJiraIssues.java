@@ -6,6 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ParseJiraIssues {
+  private ParseJiraIssues(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(ParseJiraIssues.class);
 
   /**

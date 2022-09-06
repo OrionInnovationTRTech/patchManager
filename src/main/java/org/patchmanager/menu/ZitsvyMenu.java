@@ -14,8 +14,11 @@ import static org.patchmanager.services.PseudoTerminal.pseudoTerminal;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class ZitsvyMenu {
+  private ZitsvyMenu(){
+    throw new IllegalStateException("Utility class");
+  }
   public static void zitsvyMenu() throws IOException, SshException {
-    String choice = "0";
+    String choice;
     zitsvyLoop : while(true) {
       displayMenu("Zitsvy Services Menu", ZITSVY_MENU_ITEMS);
 

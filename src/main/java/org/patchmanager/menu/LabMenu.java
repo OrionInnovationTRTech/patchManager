@@ -1,17 +1,16 @@
 package org.patchmanager.menu;
-
-import com.sshtools.common.ssh.SshException;
-
 import java.io.IOException;
 
 import static org.patchmanager.menu.DisplayMenu.displayMenu;
 import static org.patchmanager.menu.MainMenu.*;
-import static org.patchmanager.services.CheckConnection.checkConnection;
 import static org.patchmanager.services.PseudoTerminal.pseudoTerminal;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class LabMenu {
-  public static void labMenu() throws IOException, SshException {
+  private LabMenu(){
+    throw new IllegalStateException("Utility class");
+  }
+  public static void labMenu() throws IOException {
     String choice;
     labLoop : while(true) {
       displayMenu("Lab Services Menu", LAB_MENU_ITEMS);

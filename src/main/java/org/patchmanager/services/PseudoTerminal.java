@@ -15,6 +15,9 @@ import java.util.Scanner;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class PseudoTerminal {
+  private PseudoTerminal(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(PseudoTerminal.class);
 
   /**
@@ -28,7 +31,7 @@ public class PseudoTerminal {
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
-          System.out.println(ssh.executeCommand("whoami"));;
+          System.out.println(ssh.executeCommand("whoami"));
           ExpectShell shell = new ExpectShell(this);
           String cmd = "";
           while(session.isConnected()){

@@ -15,6 +15,9 @@ import java.io.IOException;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CheckFCExists {
+  private CheckFCExists(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(CheckFCExists.class);
 
   /**

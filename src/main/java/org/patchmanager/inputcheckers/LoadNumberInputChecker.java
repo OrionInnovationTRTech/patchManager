@@ -7,6 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoadNumberInputChecker {
+  private LoadNumberInputChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(LoadNumberInputChecker.class);
 
   /**

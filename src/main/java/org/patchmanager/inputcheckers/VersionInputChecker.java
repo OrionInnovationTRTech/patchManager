@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 
 public class VersionInputChecker {
+  private VersionInputChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(VersionInputChecker.class);
 
   /**

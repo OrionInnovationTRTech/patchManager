@@ -18,6 +18,9 @@ import static org.patchmanager.apiutils.EncodeBase64.encodeBase64;
  *
  */
 public class AuthChecker {
+  private AuthChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(AuthChecker.class);
 
   /**
@@ -50,6 +53,4 @@ public class AuthChecker {
     }
     return false;
   }
-
-
 }

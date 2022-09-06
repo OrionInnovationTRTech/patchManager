@@ -1,6 +1,9 @@
 package org.patchmanager.mavericksshutils;
 
 public class CheckIfGreaterThan981 {
+  private CheckIfGreaterThan981(){
+    throw new IllegalStateException("Utility class");
+  }
   /**
    * Checks if version is greater than 9.8.1 because the patch script file changes with version
    * @param versionBaseInput

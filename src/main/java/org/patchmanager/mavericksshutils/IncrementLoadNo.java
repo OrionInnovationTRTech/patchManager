@@ -9,6 +9,9 @@ import java.text.NumberFormat;
 import static java.lang.Integer.parseInt;
 
 public class IncrementLoadNo {
+  private IncrementLoadNo(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(IncrementLoadNo.class);
 
   /**
@@ -26,7 +29,7 @@ public class IncrementLoadNo {
     NumberFormat formatter = new DecimalFormat("00");
     if(loadNoNumberPart + increase <= 99){
       String newLoad = loadNoCharPart + formatter.format(increasedLoadNoNumberPart);
-      LOGGER.info("New load with an increase of "+ increase +" is: " + newLoad);
+      LOGGER.info("New load with an increase of {} {} {}", increase ," is: ", newLoad);
       return newLoad;
     }
     else {
@@ -47,7 +50,7 @@ public class IncrementLoadNo {
         }
       }
       String newLoad = String.valueOf(firstChar) + String.valueOf(secondChar) + overflowFixedIncVer;
-      LOGGER.info("New load with an increase of "+ increase +" is: " + newLoad);
+      LOGGER.info("New load with an increase of {} {} {}", increase ," is: " , newLoad);
       return newLoad;
     }
   }

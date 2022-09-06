@@ -17,6 +17,9 @@ import java.util.Scanner;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class FileTransfer {
+  private FileTransfer(){
+    throw new IllegalStateException("Utility class");
+  }
   static String sourcePath = "";
   static String sourceIp = "";
   static String sourceUsername = "";
@@ -27,7 +30,7 @@ public class FileTransfer {
   static String destinationUsername = "";
   static String destinationPassword = "";
   static Logger LOGGER = LogManager.getLogger(FileTransfer.class);
-  public static void fileTransfer(ServerUser serverUser) throws IOException, SshException {
+  public static void fileTransfer(ServerUser serverUser) throws IOException {
     LOGGER.info("File transfer service started");
     Scanner scanner = new Scanner(System.in);
     ServerUser destinationUser = null;

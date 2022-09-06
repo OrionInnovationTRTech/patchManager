@@ -11,6 +11,9 @@ import org.patchmanager.apiutils.HttpRequestAndResponse;
 import static org.patchmanager.apiutils.AuthChecker.checkAuth;
 
 public class NumberOfIssues {
+  private NumberOfIssues(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(NumberOfIssues.class);
   public static int numberOfIssues(String labelInput){
 
@@ -29,7 +32,7 @@ public class NumberOfIssues {
     // total number of issues
     numberOfIssuesForPatch = obj.getInt("total");
     if (numberOfIssuesForPatch != 0) {
-      LOGGER.info("Found " + numberOfIssuesForPatch + " issues with label " + labelInput);
+      LOGGER.info("Found {} {} {}" , numberOfIssuesForPatch , " issues with label " , labelInput);
     } else {
       LOGGER.fatal("No issues found with that label");
     }
