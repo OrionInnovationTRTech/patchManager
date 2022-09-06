@@ -65,8 +65,8 @@ public class FCCreation {
             }
 
             printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/" + loadNumberOfFcForCreation + "/' ../pom.xml"));
-            LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
-            printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
+            LOGGER.info("Sending mvn -s ../settings.xml clean && mvn -s ../settings.xml install");
+            printCommandOutputLines(shell.executeCommand("mvn -s ../settings.xml clean && mvn -s ../settings.xml install"));
 
 
             ShellProcess fcProcess;

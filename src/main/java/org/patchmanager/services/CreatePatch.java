@@ -42,8 +42,8 @@ public class CreatePatch {
     LOGGER.info("Load number of patch {} {} {}" , patchInput , " will be " , increasedLoad);
     LOGGER.info("Changing {} {} {}" , lastPom , " in pom.xml to: " , increasedLoad);
     printCommandOutputLines(shell.executeCommand("sed -i.bak 's/"+lastPom+"/" + increasedLoad + "/' ../pom.xml"));
-    LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
-    printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
+    LOGGER.info("Sending mvn -s ../settings.xml clean && mvn -s ../settings.xml install");
+    printCommandOutputLines(shell.executeCommand("mvn -s ../settings.xml clean && mvn -s ../settings.xml install"));
     LOGGER.info("Running patch script");
     ShellProcess patchProcess;
     if (checkIfGreaterThan981(versionBaseInput)){

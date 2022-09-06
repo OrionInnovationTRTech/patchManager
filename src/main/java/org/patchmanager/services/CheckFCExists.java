@@ -28,7 +28,7 @@ public class CheckFCExists {
    * @throws IOException
    * @throws SshException
    */
-  public static String checkFCExists(ServerUser serverUser, String versionHigher) throws IOException, SshException {
+  public static String checkFCExists(ServerUser serverUser, String versionHigher) throws IOException {
     final String[] nameOfFC = {"-1"};
     try(SshClient ssh = new SshClient(serverUser.getIp(), serverUser.getPort(), serverUser.getUsername(), serverUser.getPassword().toCharArray())) {
       ssh.runTask(new ShellTask(ssh) {
