@@ -16,8 +16,8 @@ import static org.patchmanager.services.PrintJiraIssuesToTxtFile.printJiraIssues
 public class MainMenu {
   Logger LOGGER = LogManager.getLogger(MainMenu.class);
   static final String[] MAIN_MENU_ITEMS = {"1. Creation of admin.txt file"
-      , "2. Run commands in lab"
-      , "3. Go to Zitsvy Menu"
+      , "2. Go to zitsvy menu"
+      , "3. Run commands in lab"
       , "4. Exit"};
 
   static final String[] LAB_MENU_ITEMS = {"1. Enter lab credentials"
@@ -49,10 +49,10 @@ public class MainMenu {
           printJiraIssuesToTxtFile();
           break;
         case "2":
-          labMenu();
+          zitsvyMenu();
           break;
         case "3":
-          zitsvyMenu();
+          labMenu();
           break;
         case "4":
           System.out.println("Terminating");
