@@ -1,21 +1,19 @@
 package org.patchmanager.menu;
-
-import com.sshtools.common.ssh.SshException;
-
 import java.io.IOException;
 
 import static org.patchmanager.menu.DisplayMenu.displayMenu;
 import static org.patchmanager.menu.MainMenu.*;
-import static org.patchmanager.services.CheckConnection.checkConnection;
-import static org.patchmanager.services.FileTransfer.fileTransfer;
 import static org.patchmanager.services.PseudoTerminal.pseudoTerminal;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
 
 public class LabMenu {
-  public static void labMenu() throws IOException, SshException {
+  private LabMenu(){
+    throw new IllegalStateException("Utility class");
+  }
+  public static void labMenu() throws IOException {
     String choice;
     labLoop : while(true) {
-      displayMenu("Lab Services Menu", labMenuItems);
+      displayMenu("Lab Services Menu", LAB_MENU_ITEMS);
 
       System.out.print("Enter Your Choice: ");
       choice = scanner.nextLine();
@@ -32,12 +30,9 @@ public class LabMenu {
             pseudoTerminal(labUsr);
           }
           break;
-        case "3"://Check connection
-          checkConnection(labUsr);
-          break;
-        case "4"://Return to main menu
+        case "3"://Return to main menu
           break labLoop;
-        case "5":
+        case "4":
           System.out.println("Terminating the program");
           System.exit(0);
           break;

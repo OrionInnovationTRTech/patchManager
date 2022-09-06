@@ -9,7 +9,7 @@ import static org.patchmanager.mavericksshutils.CheckIfGreaterThan981.checkIfGre
 
 public class CheckIfGreaterThan981Test {
   @ParameterizedTest
-  @ValueSource(strings = {"9.8.2","9.9.2","9.10.1","9.10.10","10.0.0"})
+  @ValueSource(strings = {"9.9.0","9.8.2","9.9.2","9.10.1","9.10.10","10.0.0"})
   public void shouldReturnTrueForGreaterThan981(String versionBaseInput) {
     assertTrue(checkIfGreaterThan981(versionBaseInput));
   }

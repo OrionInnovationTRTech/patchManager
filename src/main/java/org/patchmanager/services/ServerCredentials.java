@@ -9,6 +9,9 @@ import java.util.Scanner;
 import static org.patchmanager.services.CheckConnection.checkConnection;
 
 public class ServerCredentials {
+  private ServerCredentials(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(ServerCredentials.class);
   public static ServerUser serverUserCredentials(){
     Scanner scanner = new Scanner(System.in);
@@ -29,7 +32,7 @@ public class ServerCredentials {
       LOGGER.info("New user created");
       return newUser;
     }else{
-      LOGGER.info("Problem creating the user, enter credentials again");
+      LOGGER.info("Problem creating the user, enter credentials again and check VPN");
       return null;
     }
   }

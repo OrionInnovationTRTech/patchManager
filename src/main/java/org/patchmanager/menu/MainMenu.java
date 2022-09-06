@@ -12,22 +12,20 @@ import static org.patchmanager.menu.DisplayMenu.displayMenu;
 import static org.patchmanager.menu.LabMenu.labMenu;
 import static org.patchmanager.menu.ZitsvyMenu.zitsvyMenu;
 import static org.patchmanager.services.PrintJiraIssuesToTxtFile.printJiraIssuesToTxtFile;
-import static org.patchmanager.services.TestNewService.testNewService;
 
 public class MainMenu {
   Logger LOGGER = LogManager.getLogger(MainMenu.class);
-  static String[] mainMenuItems = {"1. Creation of admin.txt file"
-      , "2. Run commands in lab"
-      , "3. Go to Zitsvy Menu"
+  static final String[] MAIN_MENU_ITEMS = {"1. Creation of admin.txt file"
+      , "2. Go to zitsvy menu"
+      , "3. Run commands in lab"
       , "4. Exit"};
 
-  static String[] labMenuItems = {"1. Enter lab credentials"
+  static final String[] LAB_MENU_ITEMS = {"1. Enter lab credentials"
       ,"2. Run command on lab server"
-      ,"3. Check connection"
-      ,"4. Return to the main menu"
-      ,"5. Exit program"};
+      ,"3. Return to the main menu"
+      ,"4. Exit program"};
 
-  static String[] zitsvyMenuItems = {"1. Enter zitsvy credentials"
+  static final String[] ZITSVY_MENU_ITEMS = {"1. Enter zitsvy credentials"
       ,"2. Run command on zitsvy server"
       ,"3. File transfer"
       ,"4. Maven Build in gitwaeall"
@@ -41,7 +39,7 @@ public class MainMenu {
   public static void mainMenu() throws IOException, SshException {
     String choice;
     mainLoop: while(true){
-      displayMenu("Main Menu", mainMenuItems);
+      displayMenu("Main Menu", MAIN_MENU_ITEMS);
 
       System.out.print("Enter Your Choice: ");
       choice = scanner.nextLine();
@@ -50,10 +48,10 @@ public class MainMenu {
           printJiraIssuesToTxtFile();
           break;
         case "2":
-          labMenu();
+          zitsvyMenu();
           break;
         case "3":
-          zitsvyMenu();
+          labMenu();
           break;
         case "4":
           System.out.println("Terminating");
@@ -65,8 +63,3 @@ public class MainMenu {
 
     }
   }
-//medium
-//pr
-//menuyu gonder
-//4.8.1 genspider
-//4.9 ve üzeri başka

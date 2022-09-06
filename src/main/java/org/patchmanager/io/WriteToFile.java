@@ -10,6 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class WriteToFile {
+  private WriteToFile(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(WriteToFile.class);
 
   public static void writeToFile(String content, String fileName) {
@@ -17,7 +20,7 @@ public class WriteToFile {
     try (BufferedWriter w = new BufferedWriter(new FileWriter(fileName, false))) {
       w.write(content);
       Path path = Paths.get(fileName);
-      LOGGER.info("Contents are successfully written into " + path.toAbsolutePath());
+      LOGGER.info("Contents are successfully written into {}", path.toAbsolutePath());
 
     } catch (IOException e) {
       LOGGER.fatal("IOException while trying to write the content to file");

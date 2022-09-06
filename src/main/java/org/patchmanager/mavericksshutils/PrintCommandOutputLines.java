@@ -11,6 +11,9 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class PrintCommandOutputLines {
+  private PrintCommandOutputLines(){
+    throw new IllegalStateException("Utility class");
+  }
   public static void printCommandOutputLines(ShellProcess process) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
     String line;

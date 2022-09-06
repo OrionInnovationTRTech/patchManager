@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 
 public class VersionInputChecker {
+  private VersionInputChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(VersionInputChecker.class);
 
   /**
@@ -20,10 +23,7 @@ public class VersionInputChecker {
     Pattern patternVersion = Pattern.compile("\\d+.\\d+.\\d+.[a-zA-Z]{2}\\d{2}");
     Matcher matcherVersion = patternVersion.matcher(version);
 
-    if (!matcherVersion.matches()) {
-      return false;
-    }
-    return true;
+    return matcherVersion.matches();
 
   }
 }

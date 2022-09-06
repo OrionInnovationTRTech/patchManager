@@ -17,6 +17,9 @@ import java.util.Scanner;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class GitWaeAllMavenBuild {
+  private GitWaeAllMavenBuild(){
+    throw new IllegalStateException("Utility class");
+  }
   static String gitBranch = "";
   static Logger LOGGER = LogManager.getLogger(GitWaeAllMavenBuild.class);
   public static void gitwaeallMavenBuild(ServerUser serverUser) {
@@ -38,7 +41,7 @@ public class GitWaeAllMavenBuild {
           LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
           ShellProcess process;
           printCommandOutputLines(process = shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
-          LOGGER.info("Finished maven build with exit code: " + process.getExitCode());
+          LOGGER.info("Finished maven build with exit code: {}" , process.getExitCode());
         }
       });
     } catch (IOException e) {

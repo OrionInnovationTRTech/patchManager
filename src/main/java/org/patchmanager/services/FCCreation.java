@@ -14,7 +14,6 @@ import org.patchmanager.mavericksshutils.ServerUser;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static org.patchmanager.inputcheckers.PatchInputChecker.patchInputChecker;
 import static org.patchmanager.inputcheckers.VersionBaseInputChecker.versionBaseInputChecker;
 import static org.patchmanager.mavericksshutils.CheckIfGreaterThan981.checkIfGreaterThan981;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.charPrintCommandOutputLines;
@@ -23,11 +22,12 @@ import static org.patchmanager.services.CheckFCExists.checkFCExists;
 import static org.patchmanager.inputcheckers.LoadNumberInputChecker.loadNumberInputChecker;
 
 public class FCCreation {
+  private FCCreation(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(FCCreation.class);
   static String gitBranch = "";
-  static String labelInput = "";
   static String versionBaseInput = "";
-  static String patchInput = "";
   public static void fcCreation(ServerUser serverUser) throws IOException, SshException {
 
     Scanner scanner = new Scanner(System.in);
@@ -48,15 +48,13 @@ public class FCCreation {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
           ExpectShell shell = new ExpectShell(this);
           printCommandOutputLines(shell.executeCommand("gitwaeall"));
-          LOGGER.info("Sending git checkout " + gitBranch);
+          LOGGER.info("Sending git checkout {}" , gitBranch);
           printCommandOutputLines(shell.executeCommand("git checkout " + gitBranch));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
 
           String fc = checkFCExists(serverUser, versionBaseInput);
-
-
-          //if there is no fc file and first patch
+          //if there is no fc file
           if (fc.equals("-1")) {
             LOGGER.info("No FC file found");
             System.out.print("Please enter the load number of the FC file");
@@ -65,6 +63,12 @@ public class FCCreation {
               System.out.print("Load number invalid enter again: ");
               loadNumberOfFcForCreation = scanner.nextLine();
             }
+
+            printCommandOutputLines(shell.executeCommand("sed -i.bak 's/aa01/" + loadNumberOfFcForCreation + "/' ../pom.xml"));
+            LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
+            printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
+
+
             ShellProcess fcProcess;
             if (checkIfGreaterThan981(versionBaseInput)) {
               //run using genKLPatch.sh
@@ -73,16 +77,16 @@ public class FCCreation {
               //run using genSpidrPatch.sh
               charPrintCommandOutputLines(fcProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m FC"));
             }
-            LOGGER.info("FC script process had ended with exit code: " + fcProcess.getExitCode());
-            //if there is fc file and it is the first patch
+            LOGGER.info("FC script process had ended with exit code: {}" , fcProcess.getExitCode());
+            //if there is fc file
           }else{
-            LOGGER.fatal("There already is a FC file " + fc);
+            LOGGER.fatal("There already is a FC file {}" , fc);
           }
 
         }
       });
     }catch (SshException sshe) {
-      System.out.println("Problem with ssh connection");
+      LOGGER.fatal("Problem with ssh connection");
       LOGGER.fatal(sshe.getMessage());
     }
   }

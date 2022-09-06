@@ -34,6 +34,7 @@ public class HttpRequestAndResponse {
       System.exit(-1);
     } catch (InterruptedException e) {
       LOGGER.fatal("InterruptedException while defining HTTP request and response");
+      Thread.currentThread().interrupt();
       System.exit(-1);
     }
 

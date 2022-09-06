@@ -14,6 +14,9 @@ import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.charPrin
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CreatePatch {
+  private CreatePatch(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(CreatePatch.class);
 
   /**
@@ -33,11 +36,11 @@ public class CreatePatch {
                                           int numberOfIssues, String fcLoadNumber, String versionBaseInput,
                                          String patchInput, String lastPom) throws SshException, IOException {
     String increasedLoad = incrementLoadNo(loadNumberOfPreviousPatch, numberOfIssues);
-    LOGGER.info("FC load number was " + fcLoadNumber);
-    LOGGER.info("Number of issues of the previous patch is " + loadNumberOfPreviousPatch);
-    LOGGER.info("Number of issues with the patch label is " + numberOfIssues);
-    LOGGER.info("Load number of patch " + patchInput + " will be " + increasedLoad);
-    LOGGER.info("Changing " + lastPom + " in pom.xml to: " + increasedLoad);
+    LOGGER.info("FC load number was {}" , fcLoadNumber);
+    LOGGER.info("Number of issues of the previous patch is {}" , loadNumberOfPreviousPatch);
+    LOGGER.info("Number of issues with the patch label is {}" ,  numberOfIssues);
+    LOGGER.info("Load number of patch {} {} {}" , patchInput , " will be " , increasedLoad);
+    LOGGER.info("Changing {} {} {}" , lastPom , " in pom.xml to: " , increasedLoad);
     printCommandOutputLines(shell.executeCommand("sed -i.bak 's/"+lastPom+"/" + increasedLoad + "/' ../pom.xml"));
     LOGGER.info("Sending mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install");
     printCommandOutputLines(shell.executeCommand("mvn -o -s ../settings.xml clean && mvn -o -s ../settings.xml install"));
@@ -50,7 +53,7 @@ public class CreatePatch {
       //run using genSpidrPatch.sh
       charPrintCommandOutputLines(patchProcess = shell.executeCommand("../patch/genSpidrPatch.sh -m PATCH -p " + patchInput + " -c FC_" + versionBaseInput + "." + fcLoadNumber + "_Checksums.txt"));
     }
-    LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+    LOGGER.info("Patch script process ended with exit code: {}", patchProcess.getExitCode());
     return patchProcess;
   }
 }

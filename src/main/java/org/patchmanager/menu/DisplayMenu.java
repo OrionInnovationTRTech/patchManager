@@ -1,6 +1,9 @@
 package org.patchmanager.menu;
 
 public class DisplayMenu {
+  private DisplayMenu(){
+    throw new IllegalStateException("Utility class");
+  }
   public static void displayMenu(String title, String[] menuItems) {
     System.out.println();
     System.out.println("P A T C H   M A N A G E R");

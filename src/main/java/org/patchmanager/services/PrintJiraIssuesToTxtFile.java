@@ -19,6 +19,9 @@ import static org.patchmanager.io.WriteOutro.writeOutro;
 import static org.patchmanager.io.WriteToFile.writeToFile;
 
 public class PrintJiraIssuesToTxtFile {
+  private PrintJiraIssuesToTxtFile(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(PrintJiraIssuesToTxtFile.class);
   public static void printJiraIssuesToTxtFile(){
 

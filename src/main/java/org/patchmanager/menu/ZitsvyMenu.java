@@ -12,13 +12,15 @@ import static org.patchmanager.services.GitWaeAllMavenBuild.gitwaeallMavenBuild;
 import static org.patchmanager.services.PatchCreation.patchCreation;
 import static org.patchmanager.services.PseudoTerminal.pseudoTerminal;
 import static org.patchmanager.services.ServerCredentials.serverUserCredentials;
-import static org.patchmanager.services.WaeAdminResWarMavenBuild.waeAdminResWarMavenBuild;
 
 public class ZitsvyMenu {
+  private ZitsvyMenu(){
+    throw new IllegalStateException("Utility class");
+  }
   public static void zitsvyMenu() throws IOException, SshException {
-    String choice = "0";
+    String choice;
     zitsvyLoop : while(true) {
-      displayMenu("Zitsvy Services Menu", zitsvyMenuItems);
+      displayMenu("Zitsvy Services Menu", ZITSVY_MENU_ITEMS);
 
       System.out.print("Enter Your Choice: ");
       choice = scanner.nextLine();

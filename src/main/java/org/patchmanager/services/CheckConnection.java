@@ -13,9 +13,11 @@ import org.patchmanager.mavericksshutils.ServerUser;
 import java.io.IOException;
 import java.nio.channels.UnresolvedAddressException;
 
-import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 
 public class CheckConnection {
+  private CheckConnection(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(CheckConnection.class);
   public static boolean checkConnection(ServerUser serverUser) {
     LOGGER.info("Starting the service to check connection");

@@ -7,6 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PatchInputChecker {
+  private PatchInputChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(PatchInputChecker.class);
 
   /**
@@ -19,10 +22,7 @@ public class PatchInputChecker {
     //Regex is in the form of number
     Pattern patternPatch = Pattern.compile("\\d+");
     Matcher matcherPatch = patternPatch.matcher(patch);
-    if (!matcherPatch.matches()) {
-      return false;
-    }
-    return true;
+    return matcherPatch.matches();
 
   }
 }

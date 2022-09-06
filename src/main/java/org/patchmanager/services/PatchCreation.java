@@ -21,11 +21,13 @@ import static org.patchmanager.mavericksshutils.NumberOfIssues.numberOfIssues;
 import static org.patchmanager.mavericksshutils.PrintCommandOutputLines.printCommandOutputLines;
 import static org.patchmanager.services.CheckFCExists.checkFCExists;
 import static org.patchmanager.services.CheckMultipleFCsExist.checkMultipleFCsExist;
-import static org.patchmanager.services.CreateFC.createFC;
 import static org.patchmanager.services.CreatePatch.createPatch;
 import static org.patchmanager.inputcheckers.LoadNumberInputChecker.loadNumberInputChecker;
 
 public class PatchCreation {
+  private PatchCreation(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(PatchCreation.class);
   static String gitBranch = "";
   static String labelInput = "";
@@ -60,12 +62,12 @@ public class PatchCreation {
         @Override protected void onOpenSession(SessionChannelNG session) throws IOException, SshException, ShellTimeoutException {
           ExpectShell shell = new ExpectShell(this);
           printCommandOutputLines(shell.executeCommand("gitwaeall"));
-          LOGGER.info("Sending git checkout " + gitBranch);
+          LOGGER.info("Sending git checkout {}" , gitBranch);
           printCommandOutputLines(shell.executeCommand("git checkout " + gitBranch));
           LOGGER.info("Sending git pull");
           printCommandOutputLines(shell.executeCommand("git pull"));
           String secondFc = checkMultipleFCsExist(serverUser,versionBaseInput);
-          if (secondFc != "-1"){
+          if (!secondFc.equals("-1")){
             LOGGER.fatal("There are multiple FC files found, terminating");
             System.exit(-1);
           }
@@ -81,13 +83,13 @@ public class PatchCreation {
             //if there is fc file and it is the first patch
             else {
               String fcLoadNumber = getFcLoadNumber(fc);
-              LOGGER.info("Load number of FC is "+ fcLoadNumber);
+              LOGGER.info("Load number of FC is {}", fcLoadNumber);
               LOGGER.info("Getting number of issues");
               int numberOfIssues = numberOfIssues(labelInput);
 
               ShellProcess patchProcess = createPatch(shell, fcLoadNumber,
                   numberOfIssues, fcLoadNumber, versionBaseInput, patchInput,"aa01");
-              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+              LOGGER.info("Patch script process ended with exit code: {}" , patchProcess.getExitCode());
             }
           //If it is not the first patch
           }else {
@@ -98,7 +100,7 @@ public class PatchCreation {
               //if it is not the first patch and there is a fc file
             }else {
               String fcLoadNumber = getFcLoadNumber(fc);
-              LOGGER.info("Load number of FC is " + fcLoadNumber);
+              LOGGER.info("Load number of FC is {}" , fcLoadNumber);
               LOGGER.info("Getting number of issues");
               int numberOfIssues = numberOfIssues(labelInput);
 
@@ -110,13 +112,13 @@ public class PatchCreation {
               }
               ShellProcess patchProcess = createPatch(shell, loadNumberOfPreviousPatch,
               numberOfIssues, fcLoadNumber, versionBaseInput, patchInput, "aa01");
-              LOGGER.info("Patch script process ended with exit code: " + patchProcess.getExitCode());
+              LOGGER.info("Patch script process ended with exit code: {}" , patchProcess.getExitCode());
             }
           }
         }
       });
     }catch (SshException sshe) {
-      System.out.println("Problem with ssh connection");
+      LOGGER.fatal("Problem with ssh connection");
       LOGGER.fatal(sshe.getMessage());
     }
   }

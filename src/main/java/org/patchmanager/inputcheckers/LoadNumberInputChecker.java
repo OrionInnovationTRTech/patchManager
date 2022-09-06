@@ -7,6 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoadNumberInputChecker {
+  private LoadNumberInputChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(LoadNumberInputChecker.class);
 
   /**
@@ -16,13 +19,10 @@ public class LoadNumberInputChecker {
    */
   public static boolean loadNumberInputChecker(String loadNumber) {
     LOGGER.debug("Checking if the load number fits the criteria");
-    //Regex is in the form of charchardigitdigit
-    Pattern patternLoadNo = Pattern.compile("[a-zA-Z]{2}\\d{2}");
+    //Regex is in the form of charchardigitdigit dm64 aa01 az11 etc.
+    Pattern patternLoadNo = Pattern.compile("[a-z]{2}\\d{2}");
     Matcher matcherLoadNo = patternLoadNo.matcher(loadNumber);
-    if (!matcherLoadNo.matches()) {
-      return false;
-    }
-    return true;
+    return matcherLoadNo.matches();
 
   }
 }

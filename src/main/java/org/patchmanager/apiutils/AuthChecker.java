@@ -18,7 +18,9 @@ import static org.patchmanager.apiutils.EncodeBase64.encodeBase64;
  *
  */
 public class AuthChecker {
-
+  private AuthChecker(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(AuthChecker.class);
 
   /**
@@ -46,10 +48,9 @@ public class AuthChecker {
       System.exit(-1);
     } catch (InterruptedException e) {
       LOGGER.fatal("InterruptedException while checking for authorization");
+      Thread.currentThread().interrupt();
       System.exit(-1);
     }
     return false;
   }
-
-
 }

@@ -31,25 +31,7 @@ public class Main {
     LOGGER.info("Finishing the main function");
     long finish = System.currentTimeMillis();
     double timeElapsed = finish - start;
-    System.out.println(timeElapsed/1000);
-    System.out.println("seconds passed");
+    System.out.print(timeElapsed/1000);
+    System.out.println(" seconds have passed");
   }
-  //make password masked
-  //make parse string response shorter
-  //check style
-  //check performance of long regex
-  //username sifre input
-  //scp transfel destination user ip password directory
-  //rc 0
-  //4.8.1.dm64te load numarası hangisi
-  //fix initial loggers
-  //jira issue printlerken version verme
-  //tam olarak fc hesaplanması
-  //zitsvyden sadece sftp, labdan sadece scp
-
-  //fc yoksa ilk patch
-  //--fc al
-  //--userdan patch noyu al
-
-  //version alırken nasıl
 }
