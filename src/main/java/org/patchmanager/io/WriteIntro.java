@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class WriteIntro {
+  private WriteIntro(){
+    throw new IllegalStateException("Utility class");
+  }
   static Logger LOGGER = LogManager.getLogger(WriteIntro.class);
 
   public static String writeIntro(String patch, String versionLower, String versionHigher, String versionInput, String strDate) {

@@ -1,6 +1,5 @@
 package org.patchmanager;
 
-import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.Test;
 import org.patchmanager.apiutils.DotEnvUser;
 
@@ -14,7 +13,7 @@ import static org.patchmanager.apiutils.DotEnvUser.email;
 
 public class CheckAuthTest {
   @Test
-  public void checkAuthTest() throws ParseException, URISyntaxException, IOException, InterruptedException {
+  public void checkAuthTest() throws URISyntaxException, IOException, InterruptedException {
     DotEnvUser dotEnvUserObj = new DotEnvUser();
     assertTrue(checkAuth(email, api));
   }

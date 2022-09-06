@@ -6,11 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ParseJiraIssues {
+  private ParseJiraIssues(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(ParseJiraIssues.class);
 
   /**
    * Returns all issues in ABE-123 Description form line by line
-   *
    * @param responseBody takes the response body after GET for issues with label
    * @return string value
    */

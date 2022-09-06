@@ -34,11 +34,18 @@ public class HttpRequestAndResponse {
       System.exit(-1);
     } catch (InterruptedException e) {
       LOGGER.fatal("InterruptedException while defining HTTP request and response");
+      Thread.currentThread().interrupt();
       System.exit(-1);
     }
 
   }
 
+  /**
+   * Returns https response from jira
+   * @return
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public HttpResponse<String> createResponse() throws IOException, InterruptedException {
     response = HttpClient.newBuilder()
         .build()
@@ -46,6 +53,12 @@ public class HttpRequestAndResponse {
     return response;
   }
 
+  /**
+   * Returns a https request from jira with the label value
+   * @param labelInput
+   * @return
+   * @throws URISyntaxException
+   */
   public HttpRequest createRequest(String labelInput) throws URISyntaxException {
     request = HttpRequest.newBuilder()
         //put %20 instead of spaces to resolve illegal character

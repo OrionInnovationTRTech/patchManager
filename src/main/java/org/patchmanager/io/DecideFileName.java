@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DecideFileName {
+  private DecideFileName(){
+    throw new IllegalStateException("Utility class");
+  }
   static final Logger LOGGER = LogManager.getLogger(DecideFileName.class);
 
   public static String fileNameDecider(String patch, String versionInput) {
