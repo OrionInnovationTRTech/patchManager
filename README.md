@@ -25,7 +25,7 @@ It has two main functions:
 ### Zitsvy Menu
 <img src="assetsForReadme/zitsvyMenu.PNG"/>
 
-1. Required to execute any service, asks for the username, ip and password for the zitsvy server
+1. Required to execute any service, asks for the username, IP and password for the zitsvy server
 
 2. Run basic commands on zitsvy server such as ls, pwd, df -H etc.
 
@@ -40,6 +40,6 @@ It has two main functions:
 ### Lab Menu
 <img src="assetsForReadme/labMenu.PNG"/>
 
-1. Required to execute any service, asks for the username, ip and password for the lab server
+1. Required to execute any service, asks for the username, IP and password for the lab server
 
 2. Run basic commands on lab server such as ls, pwd, df -H etc.
